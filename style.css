@@ -1,0 +1,40 @@
+.toc-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5 {
+  margin-top: 1.5em !important;
+  padding-top: 0 !important;
+}
+
+#TOC {
+  border: none;
+  border-radius: 0;
+  padding-right: 1em;
+}
+
+body {
+  font-size: 17px;
+}
+
+img {
+  padding: 1em;
+}
+
+ol li {
+  padding-top: 1em;
+}
+
+div.blockquote,
+blockquote {
+  padding: 10.5px 21px;
+  margin: 0 0 21px;
+  font-size: 18.75px;
+  border-left: 5px solid #ecf0f1;
+}
+
+blockquote {
+  color: #607D8B;
+  font-style: oblique;
+}
