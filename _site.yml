@@ -1,0 +1,17 @@
+name: ""
+output_dir: "docs"
+navbar:
+  title: "Marcus R Coding Class"
+  left:
+    - text: "Getting Started"
+      href: index.html
+    - text: "Resources"
+      href: resources.html
+output: 
+  html_document: 
+    theme: flatly
+    toc: TRUE
+    toc_float: true
+    toc_depth: 3
+    number_sections: FALSE
+    css: style.css
