@@ -1,6 +1,6 @@
 ---
 title: "Marcus R Coding Class"
-author: "[Dr. Hasse Walum](https://github.com/haswal)"
+author: "[Dr. Hasse Walum](https://scholar.google.se/citations?user=kIwmUAIAAAAJ&hl=en)"
 output:
   html_document:
     css: [home.css, style.css]
