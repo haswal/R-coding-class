@@ -17,8 +17,8 @@ Before we can get started we need to install **two** different software programs
 #### Start by installing R:
 
 * Go to [cran.r-project.org](https://cran.r-project.org)
-    + Windows users click **Download R for Windows** and on the next page **install R for the first time** and finally **Download R 4.0.2 for Windows**.
-    + Mac users click **Download R for (Mac) OS X** and on the next page pick the version matching the OS version you are using (for most users **R-4.0.2.pkg** will be the right choice).
+    + Windows users click **Download R for Windows** and on the next page **install R for the first time** and finally **Download R 4.0.4 for Windows**.
+    + Mac users click **Download R for (Mac) OS X** and on the next page pick the version matching the OS version you are using (for most users **R-4.0.4.pkg** will be the right choice).
 
 #### Next we will install RStudio:
 
