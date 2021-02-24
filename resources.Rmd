@@ -10,38 +10,38 @@ Here you can find links to the reference text and other helpful guides and examp
 
 [![](https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png){width=25%}](https://r4ds.had.co.nz/)
 
-### Twitte`R`
+<!-- ### Twitte`R` -->
 
-The `#rstats` community on Twitter is highly active and a great resource for learning and sharing all things R. Check it out!
+<!-- The `#rstats` community on Twitter is highly active and a great resource for learning and sharing all things R. Check it out! -->
 
-https://twitter.com/hashtag/rstats?lang=en
+<!-- https://twitter.com/hashtag/rstats?lang=en -->
 
-### TidyTuesday
-An interesting and new data set each week to practice transforming and plotting. 
+<!-- ### TidyTuesday -->
+<!-- An interesting and new data set each week to practice transforming and plotting.  -->
 
-https://github.com/rfordatascience/tidytuesday
+<!-- https://github.com/rfordatascience/tidytuesday -->
 
-Folks often share their plots (and link to their R code) on Twitter with [#tidytuesday](https://twitter.com/search?q=tidytuesday&src=typed_query&f=live).
+<!-- Folks often share their plots (and link to their R code) on Twitter with [#tidytuesday](https://twitter.com/search?q=tidytuesday&src=typed_query&f=live). -->
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tune in today at 🚨 7 PM ET 🚨 for another LIVE <a href="https://twitter.com/hashtag/tidytuesday?src=hash&amp;ref_src=twsrc%5Etfw">#tidytuesday</a> screencast. We&#39;ll be analyzing extinct plants! 🌱🌿🍁🍂<br><br>This week only is two hours LATER than the usual screencasts (so if you&#39;re in Australia, now&#39;s your chance to join live!) 😉 🇦🇺<a href="https://t.co/GJURrXOtD4">https://t.co/GJURrXOtD4</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/1295809704145424391?ref_src=twsrc%5Etfw">August 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tune in today at 🚨 7 PM ET 🚨 for another LIVE <a href="https://twitter.com/hashtag/tidytuesday?src=hash&amp;ref_src=twsrc%5Etfw">#tidytuesday</a> screencast. We&#39;ll be analyzing extinct plants! 🌱🌿🍁🍂<br><br>This week only is two hours LATER than the usual screencasts (so if you&#39;re in Australia, now&#39;s your chance to join live!) 😉 🇦🇺<a href="https://t.co/GJURrXOtD4">https://t.co/GJURrXOtD4</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/1295809704145424391?ref_src=twsrc%5Etfw">August 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
 
 
-### RStudio Education Website
+<!-- ### RStudio Education Website -->
 
-[https://education.rstudio.com/](https://education.rstudio.com/) - This site has a good, curated set of helpful links to help you start or learn how to do more with R.
+<!-- [https://education.rstudio.com/](https://education.rstudio.com/) - This site has a good, curated set of helpful links to help you start or learn how to do more with R. -->
 
-### Interactive Practice
+<!-- ### Interactive Practice -->
 
-[RStudio Cloud Primers](https://rstudio.cloud/learn/primers) - These are some short exercises that use interactive windows for practicing specific skills. 
+<!-- [RStudio Cloud Primers](https://rstudio.cloud/learn/primers) - These are some short exercises that use interactive windows for practicing specific skills.  -->
 
 ### Teacups, Giraffes, & Statistics
 
 https://tinystats.github.io/teacups-giraffes-and-statistics/
 
-### Other websites
+<!-- ### Other websites -->
 
-All of the links below are sites built using R. 
+<!-- All of the links below are sites built using R.  -->
 
-* A book: https://smltar.com/
-* A blog: http://desiree.rbind.io/
-* A project site: https://www.tidymodels.org/
+<!-- * A book: https://smltar.com/ -->
+<!-- * A blog: http://desiree.rbind.io/ -->
+<!-- * A project site: https://www.tidymodels.org/ -->

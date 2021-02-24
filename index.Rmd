@@ -8,7 +8,7 @@ output:
 
 ## Welcome!
 
-This is workshop site. Here you will find posted resources for each lesson. 
+This is the class website. Here you will find posted resources for each lesson. 
 
 ## Installing R and RStudio
 

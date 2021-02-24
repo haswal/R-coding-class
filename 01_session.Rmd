@@ -1,0 +1,56 @@
+---
+title: "Session 1"
+date: February 26, 2021
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Agenda
+
+* Getting familiar with the RStudio IDE
+* Importing data from an Excel file
+* Introducing `ggplot2` to create data visualizations
+
+<!-- ## Script -->
+
+<!-- Here's the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop. -->
+
+<!--to add scripts -->
+
+<!-- ```{r, include = FALSE, eval = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r echo=FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_file('session_01.R') -->
+<!-- ``` -->
+
+
+
+## Cheatsheets
+
+* [RStudio IDE](https://rstudio.com/wp-content/uploads/2016/01/rstudio-IDE-cheatsheet.pdf)
+
+* [ggplot2](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
+
+
+## Resources
+
+A nice review of the RStudio IDE and R Projects:
+https://www.youtube.com/watch?v=kfcX5DEMAp4
+
+To learn about loess: https://en.wikipedia.org/wiki/Local_regression
+
+
+## Exercises
+
+No exercises for this week, but I recommend going through the script from this session yourself and practice predicting what the code will generate before running it.

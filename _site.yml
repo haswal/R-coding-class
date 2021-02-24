@@ -7,6 +7,10 @@ navbar:
       href: index.html
     #- text: "Resources"
     #  href: resources.html
+    #- text: "Sessions"
+     # menu:
+      #  - text: "Session 1"
+       #   href: 01_session.html
 output: 
   html_document: 
     theme: flatly
