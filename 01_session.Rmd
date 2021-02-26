@@ -15,11 +15,11 @@ knitr::opts_chunk$set(echo = TRUE)
 * Importing data from an Excel file
 * Introducing `ggplot2` to create data visualizations
 
-<!-- ## Script -->
+## Script
 
-Here's the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop.
+Here's the script from Session 1. You can download this and save it inside the R Project folder that you created for this workshop.
 
-to add scripts
+<!-- to add scripts -->
 
 ```{r, include = FALSE, eval = FALSE}
 
