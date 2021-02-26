@@ -405,18 +405,9 @@ div.tocify {
 <li>Introducing <code>ggplot2</code> to create data visualizations</li>
 </ul>
 <!-- ## Script -->
-<!-- Here's the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop. -->
-<!--to add scripts -->
-<!-- ```{r, include = FALSE, eval = FALSE} -->
-<!-- # install and load these packages -->
-<!-- devtools::install_github('yihui/xfun') -->
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-<!-- ```{r echo=FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_file('session_01.R') -->
-<!-- ``` -->
+<p>Here’s the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop.</p>
+<p>to add scripts</p>
+<a href="data:text/plain;base64,I0xvYWQgcGFja2FnZXMgdG8gZW5hYmxlIHRoZSB1c2Ugb2YgZ2dwbG90IGFuZCByZWFkX2V4Y2VsIApsaWJyYXJ5KHRpZHl2ZXJzZSkKbGlicmFyeShyZWFkeGwpCgojVXNlIHRoZSByZWFkX2V4Y2VsIGZ1bmN0aW9uIHRvIGltcG9ydCBkYXRhIGZyb20gYW4gZXhjZWwgZG9jdW1lbnQKI0Fzc2lnbiB0byBhbiBvYmplY3Qgd2l0aCA8LSAoIkFsdCIgKyAiLSIpCiNPYmplY3QgbmFtZXMgbXVzdCBzdGFydCB3aXRoIGEgbGV0dGVyLCBjYW4gaW5jbHVkZSBsZXR0ZXJzLCBudW1iZXJzLCBwZXJpb2RzLCB1bmRlcnNjb3JlcyAKY3l0b19kYXRhIDwtIHJlYWRfZXhjZWwocGF0aCA9ICJDeXRva2luZS1SZXN1bHRzX01VTFRJUEwuNjE1MTMzLnhsc3giLAogICAgICAgICAgICAgICAgICAgICAgICBzaGVldCA9IDIsIAogICAgICAgICAgICAgICAgICAgICAgICBza2lwID0gMSkgCgoKI1VzZSB0aGUgZ2dwbG90IGZ1bmN0aW9uIHRvIHN0YXJ0IGJ1aWxkaW5nIGEgcGxvdApnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSkKCiNDb21wbGV0ZSBncmFwaCBieSBhZGRpbmcgbGF5ZXJzLCBtb3N0IG9mdGVuICJnZW9tcyIKI0xheWVycyBhcmUgYWRkZWQgd2l0aCBhICIrIgpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSkrCiAgZ2VvbV9wb2ludChtYXBwaW5nID0gYWVzKHkgPSBDRDQwTCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgeCA9IFRQKSkKCiNBZGRpbmcgc29tZSBjb2xvcgojT25seSBjb2x1bW5zIHNob3VsZCBiZSBtYXBwZWQgdG8gYWVzdGhldGljcwpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSkrCiAgZ2VvbV9wb2ludChtYXBwaW5nID0gYWVzKHkgPSBDRDQwTCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgeCA9IFRQLAogICAgICAgICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpCgojQXNzaWduIHNoYXBlcyB0byBkaWZmZXJlbnQgbW9ua2V5cyBpbnN0ZWFkIG9mIGNvbG9yCmdncGxvdChkYXRhID0gY3l0b19kYXRhKSsKICBnZW9tX3BvaW50KG1hcHBpbmcgPSBhZXMoeSA9IENENDBMLAogICAgICAgICAgICAgICAgICAgICAgICAgICB4ID0gVFAsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHNoYXBlID0gTW9ua2V5KSkKCiNTaXplIGluc3RlYWQgb2Ygc2hhcGUKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEpKwogIGdlb21fcG9pbnQobWFwcGluZyA9IGFlcyh5ID0gQ0Q0MEwsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgc2l6ZSA9IE1vbmtleSkpCgojQ2hhbmdpbmcgdGhlIGNvbG9yIG9mIGFsbCBzaGFwZXMKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEpKwogIGdlb21fcG9pbnQobWFwcGluZyA9IGFlcyh5ID0gQ0Q0MEwsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgc2hhcGUgPSBNb25rZXkpLAogICAgICAgICAgICAgY29sb3IgPSAiYmx1ZSIpCgojQWRkaW5nIGEgdHJlbmQgbGluZSwgc2UgPSBUUlVFIC8gRkFMU0UgY29udHJvbHMgdGhlIGNvbmZpZGVuY2UgYmFuZHMKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEpKwogIGdlb21fcG9pbnQobWFwcGluZyA9IGFlcyh5ID0gQ0Q0MEwsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSsKICBnZW9tX3Ntb290aChtYXBwaW5nID0gYWVzKHkgPSBDRDQwTCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHggPSBUUCksCiAgICAgICAgICAgICAgc2UgPSBGQUxTRSkKCiNNYXBwaW5nIGEgdmFyaWFibGUgd2l0aCBhICItIiBpbiB0aGUgbmFtZSwgdXNpbmcgYmFja3RpY2tzCmdncGxvdChkYXRhID0gY3l0b19kYXRhKSsKICBnZW9tX3BvaW50KG1hcHBpbmcgPSBhZXMoeSA9IGBHLUNTRmAsCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKQoKCgo=" download="session_01.R">Download session_01.R</a>
 </div>
 <div id="cheatsheets" class="section level2">
 <h2>Cheatsheets</h2>

@@ -17,23 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- ## Script -->
 
-<!-- Here's the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop. -->
+Here's the script from Session 1. You should download this and save it inside the R Project folder that you created for this workshop.
 
-<!--to add scripts -->
+to add scripts
 
-<!-- ```{r, include = FALSE, eval = FALSE} -->
+```{r, include = FALSE, eval = FALSE}
 
-<!-- # install and load these packages -->
-<!-- devtools::install_github('yihui/xfun') -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- ```{r echo=FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_file('session_01.R') -->
-<!-- ``` -->
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('session_01.R')
+```
 
 
 
