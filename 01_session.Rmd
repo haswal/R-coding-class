@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Agenda
 
 * Getting familiar with the RStudio IDE
+* Using RStudio Projects
 * Importing data from an Excel file
 * Introducing `ggplot2` to create data visualizations
 
