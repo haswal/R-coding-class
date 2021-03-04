@@ -1,0 +1,242 @@
+---
+title: "Session 2: Continuing with `ggplot2`"
+date: "Mar 5, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+
+```
+
+
+## Agenda
+
+* Style your ggplot with labels, themes, and colors
+* Export your plot with `ggsave()`
+* Transform your data set from wide to long format using `pivot_longer()`
+* Split your plot into subplots, using `facet_grid()` or `facet_wrap()`
+* Customize your plot by layering geoms
+
+<!-- COMMENT--
+* Show that mapping = aes can go in the main ggplot or the geom
+* Introduce the vocabulary of "mapping" a property to a variable-- and vice versa. 
+* Styling your ggplot: 
+  * Changing axes labels + Title
+  * Hiding legend
+  * Adding a pre-defined theme
+  * Changing colors without changing the theme
+* ggsave()
+
+* Using `pivot_longer` to switch from wide to longer format
+* Facet grid and facet wrap
+* Geometric objects (aka geoms)
+--> 
+
+<!-- ## Script -->
+
+<!-- You can download both scripts from both halves of today's session, by clicking the links below. Feel free to combine these into a single script file to save in your RStudio project.  -->
+
+<!--to add scripts -->
+
+<!-- ```{r, echo = FALSE, eval = TRUE} -->
+
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r echo=FALSE, eval = TRUE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_02_desiree.R", "scripts/Session_2_hasse.R"),  -->
+<!--                   text = paste("Download Session 2 scripts"),  -->
+<!--                   name = paste0("02_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+
+
+
+## Cheatsheets
+
+* [ggplot2](https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
+
+## Resources
+
+Most of what we cover today will be based off of Chapter 3 in the R4DS textbook:
+https://r4ds.had.co.nz/data-visualisation.html
+
+Here are third-party packages that you may find fun to test out on your own ggplots (some we mentioned during the session, others we did not):
+
+* [`ggthemes`](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) for new themes + color palettes
+* [`wesanderson`](https://github.com/karthik/wesanderson) color palettes
+* [`RcolorBrewer`](https://www.datanovia.com/en/blog/the-a-z-of-rcolorbrewer-palette/) for palettes
+* [`LaCroixColoR`](https://github.com/johannesbjork/LaCroixColoR) color palettes
+    * This package is on Github only for now (not CRAN), so it has to be installed with the code below before you can load and use it:
+    ```{r, eval = FALSE, echo = TRUE}
+        install.packages("devtools")
+        devtools::install_github("johannesbjork/LaCroixColoR")
+    ```
+
+
+## Giraffe Homework
+There will be two sets of homework exercises this week; one part will be the exercises listed below, the other will be the materials in the *Intro to the Normal Distribution* module on the website [Teacups, Giraffes, and Statistics](https://tinystats.github.io/teacups-giraffes-and-statistics/02_bellCurve.html).
+
+Work through the module and finish the coding exercises presented in the interactive windows. You should however complete the coding aspects of the module in RStudio on your local machine instead of on the site, so that you can save what you do. To run the examples locally, you will need a data file containing the giraffe heights, found here: 
+
+```{r, include = FALSE, eval = FALSE}
+
+# install and load these packages
+devtools::install_github('yihui/xfun')
+
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('Giraffe_heights.csv')
+```
+
+## Exercises 
+The rest of the exercises for this week are below. I suggest that you create a new R script to work through the answers. You should save your Exercises script in your RStudio Project for this workshop. 
+
+You'll first need to read in the data the way that we showed during Session 1, and call it `cyto_data`. 
+
+
+1. Run `ggplot(data = cyto_data, mapping = aes(x = TP, y = CD40L))`. What do you see? (Make sure you have loaded all the packages that you need!)  
+
+
+1. Make a scatterplot of time (`TP`) vs the cytokine `FGF-2`.   
+
+
+1. Recreate the R code necessary to generate the following graph:  
+
+    ```{r, echo = FALSE, eval = TRUE, message = FALSE, fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`)) +
+      geom_smooth()
+
+    ```
+
+  
+1. Building on the scatterplot you made in #2, make the data points vary in size based on the values of the variable `RANTES` (i.e., *map* the aesthetic property `size` to the variable `RANTES`). Then, one at a time, map `color` and `shape` to `RANTES`. Finally, map `size`, `color`, and `shape` to the variable for monkey ID. How do these aesthetics behavior differently for continuous vs. categorical variables?   
+
+
+1. What's gone wrong with this code? Why are the points not blue?  
+
+    ```{r, echo = TRUE, eval = TRUE, fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`, color = "blue" )) + 
+      geom_point()
+    ```
+
+
+
+1.  What happens if you map multiple aesthetics to the same variable?  
+
+
+1. What happens if you map an aesthetic to something other than a variable name, like `aes(color = TP < 4)`? Note, you'll also need to specify x and y.  
+
+
+1. Fix the code below to make it run:  
+
+    ```{r, echo = TRUE, eval = FALSE, fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data) 
+    + geom_point(mapping = aes(x = MIG, y = BLC)
+
+    ```
+  
+  
+1. Do your best to recreate the plot below.
+
+    ```{r, echo = FALSE, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`, shape = Monkey)) + 
+    labs(x = "Time", shape = "Subject", title = "FGF-2 across time") +
+    geom_point() + 
+    theme_minimal()
+    ```
+      * Now, can you use the `FantasticFox1` palette from the `wesanderson` package to create the plot below?
+  
+        ```{r, echo = FALSE, out.width = "100%"}
+        library(wesanderson)
+        ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`, shape = Monkey, color = Monkey)) + 
+        labs(x = "Time", shape = "Subject", color = "Subject", title = "FGF-2 across time") +
+        geom_point() + 
+        theme_minimal() +
+        scale_color_manual(values = wes_palette("FantasticFox1"))
+      
+        ```
+
+1. Save the ggplot from the last exercise as a square plot under the filename `plot1.jpg` inside of your RStudio project.
+
+
+1. What plots does the following code make? What does `.` do?  
+
+    ```{r, echo = TRUE, eval = FALSE, fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data) + 
+      geom_point(mapping = aes(x = TP, y = `FGF-2`)) +
+      facet_grid(Monkey ~ .)
+
+    ggplot(data = mpg) + 
+      geom_point(mapping = aes(x = TP, y = `FGF-2`)) +
+      facet_grid(. ~ Monkey)
+    ```
+
+
+1. Read `?facet_wrap`. What does `nrow` do? What does `ncol` do? Why doesn't `facet_grid()` have `nrow` and `ncol` arguments?   
+
+
+
+1. Recreate the R code necessary to generate the following graphs.  
+
+    a. 
+
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point() +
+      geom_smooth(se= FALSE) 
+
+    ```
+    
+    b. 
+
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point() +
+      geom_smooth(mapping = aes(group = Monkey), se = FALSE)
+    ```
+  
+    c. 
+
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point(mapping = aes(color = Monkey)) +
+      geom_smooth(mapping = aes(color = Monkey), se = FALSE)
+    ```
+
+    d. 
+    
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point(mapping = aes(color = Monkey)) +
+      geom_smooth(mapping = aes(), se = FALSE)
+    ```
+
+    e. 
+  
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point(mapping = aes(shape = Monkey)) +
+      geom_smooth(mapping = aes(linetype = Monkey), se = FALSE)
+    ```
+    
+    f. 
+    
+    ```{r, eval = TRUE, echo = FALSE, message = FALSE, warning = FALSE,  fig.width = 4, fig.height = 3, out.width = "100%"}
+    ggplot(data = cyto_data, mapping = aes(x = TP, y = `IP-10`)) +
+      geom_point(mapping = aes(), color = "white", size = 4) +
+      geom_point(mapping = aes(color = Monkey))
+    ```
+
