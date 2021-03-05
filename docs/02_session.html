@@ -421,22 +421,11 @@ div.tocify {
 * Facet grid and facet wrap
 * Geometric objects (aka geoms)
 -->
-<!-- ## Script -->
-<!-- You can download both scripts from both halves of today's session, by clicking the links below. Feel free to combine these into a single script file to save in your RStudio project.  -->
-<!--to add scripts -->
-<!-- ```{r, echo = FALSE, eval = TRUE} -->
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-<!-- ```{r echo=FALSE, eval = TRUE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/session_02_desiree.R", "scripts/Session_2_hasse.R"),  -->
-<!--                   text = paste("Download Session 2 scripts"),  -->
-<!--                   name = paste0("02_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
+</div>
+<div id="script" class="section level2">
+<h2>Script</h2>
+<p>You can download the script from today’s session, by clicking the link below.</p>
+<a href="data:text/plain;base64,IyBTZXNzaW9uIDAyCiMgTWFyIDUsIDIwMjEKCiMgTG9hZCBwYWNrYWdlcyAtLS0tCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeSh3ZXNhbmRlcnNvbikKbGlicmFyeShnZ3RoZW1lcykKCiMgUmVhZCBpbiB0aGUgZGF0YSAtLS0tCmN5dG9fZGF0YSA8LSByZWFkX2V4Y2VsKHBhdGggPSAiQ3l0b2tpbmUtUmVzdWx0c19NVUxUSVBMLjYxNTEzMy54bHN4IiwKICAgICAgICAgICAgICAgICAgICAgICAgc2hlZXQgPSAyLAogICAgICAgICAgICAgICAgICAgICAgICBza2lwID0gMSkgCgojIE1hcHBpbmcgaW4gZ2dwbG90KCkgLS0tLQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpIAoKIyBDdXN0b21pemluZyBnZ3Bsb3QgLS0tLQojIENoYW5nZSBvciBhZGQgbGFiZWxzIGZvciBheGVzLCB0aXRsZSwgYW5kIGxlZ2VuZApnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIGxhYnMoeCA9ICJUaW1lcG9pbnQiLCAKICAgICAgIHkgPSAiQ0Q0MCBsaWdhbmQiLCAKICAgICAgIHRpdGxlID0gIkNENDBMIGV4cHJlc3Npb24iLCAKICAgICAgIHN1YnRpdGxlID0gIlN1YnRpdGxlIGdvZXMgaGVyZSIsIAogICAgICAgdGFnID0gIkEiLCAKICAgICAgIGNvbG9yID0gIlJoZXN1cyBtYWNhcXVlIiwgCiAgICAgICBjYXB0aW9uID0gIk15IGNhcHRpb24gaGVyZSIgKQoKCiMgT3IgcmVtb3ZlIHRoZW0KZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsKICBsYWJzKHggPSAiVGltZXBvaW50IiwgCiAgICAgICB5ID0gTlVMTCwgCiAgICAgICB0aXRsZSA9ICJDRDQwTCBleHByZXNzaW9uIiwgCiAgICAgICBjb2xvciA9IE5VTEwsIAogICAgICAgY2FwdGlvbiA9ICJNeSBjYXB0aW9uIGhlcmUiICkKCiMgSGlkZSBsZWdlbmQKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsKICBsYWJzKHggPSAiVGltZXBvaW50IiwgCiAgICAgICB5ID0gTlVMTCwgCiAgICAgICB0aXRsZSA9ICJDRDQwTCBleHByZXNzaW9uIiwgCiAgICAgICBjb2xvciA9IE5VTEwsIAogICAgICAgY2FwdGlvbiA9ICJNeSBjYXB0aW9uIGhlcmUiICkgKwogIGd1aWRlcyhjb2xvciA9IEZBTFNFKQoKIyBBZGQgYSBidWlsdC1pbiAiY29tcGxldGUgdGhlbWUiCiMgaHR0cHM6Ly9nZ3Bsb3QyLnRpZHl2ZXJzZS5vcmcvcmVmZXJlbmNlL2dndGhlbWUuaHRtbApnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIHRoZW1lX2NsYXNzaWMoKQoKIyBDaGFuZ2UgY3VzdG9tIGNvbG9yIHBhbGV0dGVzCiMgUHJlZGVmaW5lZCBjb2xvciBuYW1lOiBodHRwOi8vc2FwZS5pbmYudXNpLmNoL3F1aWNrLXJlZmVyZW5jZS9nZ3Bsb3QyL2NvbG91cgojIE9yIGhleCBjb2xvciBjb2RlczogaHR0cHM6Ly9odG1sY29sb3Jjb2Rlcy5jb20vCgojIGRpc2NyZXRlIHZhcmlhYmxlcwpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIHRoZW1lX2NsYXNzaWMoKSArCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcyA9IGMoImJsdWUiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAicGluayIsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJvcmNoaWQiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiIzAwMDAwMCIsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJncmF5IikpCgojIGNvbnRpbnVvdXMgdmFyaWFibGUKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IFJBTlRFUykpICsgCiAgZ2VvbV9wb2ludCgpICsKICB0aGVtZV9jbGFzc2ljKCkgKwogIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9ICJyZWQiLCAKICAgICAgICAgICAgICAgICAgICAgICBoaWdoID0gImJsdWUiKQoKIyBUaGlyZCBwYXJ0eSBwYWxldHRlcwojIGluc3RhbGwucGFja2FnZXMoIndlc2FuZGVyc29uIikKIyBsaWJyYXJ5KHdlc2FuZGVyc29uKSBhdCB0aGUgdG9wIG9mIHRoZSBzY3JpcHQKIyBUbyBzZWUgcGFsZXR0ZXM6IGh0dHBzOi8vZ2l0aHViLmNvbS9rYXJ0aGlrL3dlc2FuZGVyc29uCgojIGRpc2NyZXRlCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLCAKICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSArCiAgdGhlbWVfY2xhc3NpYygpICsKICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzID0gd2VzX3BhbGV0dGUoIkRhcmplZWxpbmcxIikpCgojIGNvbnRpbnVvdXMgKHNjYWxlX2NvbG9yX2dyYWRpZW50bikKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IFJBTlRFUykpICsgCiAgZ2VvbV9wb2ludCgpICsgCiAgdGhlbWVfY2xhc3NpYygpICsKICBzY2FsZV9jb2xvcl9ncmFkaWVudG4oY29sb3JzID0gd2VzX3BhbGV0dGUoIlppc3NvdTEiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJjb250aW51b3VzIikpCgojIE90aGVyIHdheXMgdG8gc2V0IHRoZW1lcyArIGNvbG9ycwojIGluc3RhbGwucGFja2FnZXMoImdndGhlbWVzIikKIyBodHRwczovL3l1dGFubmloaWxhdGlvbi5naXRodWIuaW8vYWxsWW91ckZpZ3VyZUFyZUJlbG9uZ1RvVXMvZ2d0aGVtZXMvCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLCAKICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSArIAogIHNjYWxlX2NvbG9yX2hjKCkKCiMgQSBnZ3RoZW1lcyB0aGVtZQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsgCiAgdGhlbWVfZXhjZWxfbmV3KCkKCiMgU2F2ZSB5b3VyIGdncGxvdCBvdXRwdXQgLS0tLS0tLS0tLS0tLQojIEFzc2lnbiB0aGUgcGxvdCB0byBhbiBSIG9iamVjdApwIDwtIGdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSAKCiMgQ2FuIHNhdmUgZGlyZWN0bHkgaW50byBSIHByb2plY3QgZm9sZGVyIG9yIHN1YmZvbGRlcgpnZ3NhdmUocCwgCiAgICAgICBmaWxlbmFtZSA9ICJwbG90MS5wbmciLCAKICAgICAgIHdpZHRoID0gNSwgCiAgICAgICBoZWlnaHQgPSAxKQoKI3Bpdm90X2xvbmdlcigpLS0tLQojVXNlIHBpdm90X2xvbmdlciB0byB0cmFuc2Zvcm0gZGF0YSBmcm9tIHdpZGUgdG8gbG9uZyBmb3JtYXQKCmN5dG9fZGF0YV9sb25nIDwtIHBpdm90X2xvbmdlcihjeXRvX2RhdGEsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29scyA9IDU6NDksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBuYW1lc190byA9ICJDeXRva2luZXMiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlc190byA9ICJDb25jZW50cmF0aW9uIikKCiNGYWNldHMtLS0tCiNQbG90IGFsbCBjeXRva2luZXMgdXNpbmcgZmFjZXRfd3JhcAoKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGFfbG9uZykrCiAgZ2VvbV9zbW9vdGgobWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgeSA9IENvbmNlbnRyYXRpb24pKSsKICB0aGVtZV9taW5pbWFsKCkrCiAgZmFjZXRfd3JhcCh+Q3l0b2tpbmVzKQoKI0xldCBheGlzIHNjYWxlcyBiZSAiZnJlZSIgCmdncGxvdChkYXRhID0gY3l0b19kYXRhX2xvbmcpKwogIGdlb21fc21vb3RoKG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDb25jZW50cmF0aW9uKSkrCiAgdGhlbWVfbWluaW1hbCgpKwogIGZhY2V0X3dyYXAofkN5dG9raW5lcywgCiAgICAgICAgICAgICBzY2FsZXMgPSAiZnJlZSIpCgojRnJlZSBvbmx5IHktYXhpcwpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YV9sb25nKSsKICBnZW9tX3Ntb290aChtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB5ID0gQ29uY2VudHJhdGlvbikpKwogIHRoZW1lX21pbmltYWwoKSsKICBmYWNldF93cmFwKH5DeXRva2luZXMsIAogICAgICAgICAgICAgc2NhbGVzID0gImZyZWVfeSIpCgojZmFjZXRfZ3JpZCgpIGlzIGFub3RoZXIgd2F5IHRvIGNyZWF0ZSBmYWNldGVkIHBsb3RzCmdncGxvdChkYXRhID0gY3l0b19kYXRhX2xvbmcpKwogIGdlb21fc21vb3RoKG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDb25jZW50cmF0aW9uKSkrCiAgdGhlbWVfbWluaW1hbCgpKwogIGZhY2V0X2dyaWQoQ3l0b2tpbmVzfk1vbmtleSwgc2NhbGVzID0gImZyZWVfeSIpCgojTGF5ZXJpbmcgZ2VvbXMtLS0tCiNBZGRpbmcgbXVsdGlwbGUgZ2VvbXMgb2YgdGhlIHNhbWUgdHlwZQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBgRkdGLTJgKSkrCiAgZ2VvbV9zbW9vdGgobWFwcGluZyA9IGFlcyhjb2xvciA9IE1vbmtleSksIHVwCiAgICAgICAgICAgICAgc2UgPSBGQUxTRSwKICAgICAgICAgICAgICBzaXplID0gMC41KSsKICBnZW9tX3Ntb290aCgpCgojQSBzaWxseSBleGFtcGxlIHNob3dpbmcgdGhhdCB5b3UgY2FuIGFkZCBNQU5ZIGdlb21zIG9mIHRoZSBzYW1lIHR5cGUKCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IGBGR0YtMmApKSsKICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5MTAiLCBzaXplID0gMTcsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTIwIiwgc2l6ZSA9IDE1LCBzZSA9IEYpKwogIGdlb21fc21vb3RoKGNvbG9yID0gImdyZXkzMCIsIHNpemUgPSAxMywgc2UgPSBGKSsKICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5NDAiLCBzaXplID0gMTEsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTUwIiwgc2l6ZSA9IDksIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTYwIiwgc2l6ZSA9IDcsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTcwIiwgc2l6ZSA9IDUsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTgwIiwgc2l6ZSA9IDMsIHNlID0gRikrdXBkYXRlLmZvcm11bGEubG0KICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5OTAiLCBzaXplID0gMSwgc2UgPSBGKSsKICB0aGVtZV9jbGFzc2ljKCkrCiAgc2NhbGVfeV9jb250aW51b3VzKGV4cGFuZCA9IGMoMC4yLCAwLjIpKQo=" download="session_02.R">Download session_02.R</a>
 </div>
 <div id="cheatsheets" class="section level2">
 <h2>Cheatsheets</h2>
@@ -474,22 +463,22 @@ div.tocify {
 <li><p>Run <code>ggplot(data = cyto_data, mapping = aes(x = TP, y = CD40L))</code>. What do you see? (Make sure you have loaded all the packages that you need!)</p></li>
 <li><p>Make a scatterplot of time (<code>TP</code>) vs the cytokine <code>FGF-2</code>.</p></li>
 <li><p>Recreate the R code necessary to generate the following graph:</p>
-<p><img src="02_session_files/figure-html/unnamed-chunk-4-1.png" width="100%" /></p></li>
+<p><img src="02_session_files/figure-html/unnamed-chunk-6-1.png" width="100%" /></p></li>
 <li><p>Building on the scatterplot you made in #2, make the data points vary in size based on the values of the variable <code>RANTES</code> (i.e., <em>map</em> the aesthetic property <code>size</code> to the variable <code>RANTES</code>). Then, one at a time, map <code>color</code> and <code>shape</code> to <code>RANTES</code>. Finally, map <code>size</code>, <code>color</code>, and <code>shape</code> to the variable for monkey ID. How do these aesthetics behavior differently for continuous vs. categorical variables?</p></li>
 <li><p>What’s gone wrong with this code? Why are the points not blue?</p>
 <pre class="r"><code>ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`, color = &quot;blue&quot; )) + 
   geom_point()</code></pre>
-<p><img src="02_session_files/figure-html/unnamed-chunk-5-1.png" width="100%" /></p></li>
+<p><img src="02_session_files/figure-html/unnamed-chunk-7-1.png" width="100%" /></p></li>
 <li><p>What happens if you map multiple aesthetics to the same variable?</p></li>
 <li><p>What happens if you map an aesthetic to something other than a variable name, like <code>aes(color = TP &lt; 4)</code>? Note, you’ll also need to specify x and y.</p></li>
 <li><p>Fix the code below to make it run:</p>
 <pre class="r"><code>ggplot(data = cyto_data) 
 + geom_point(mapping = aes(x = MIG, y = BLC)</code></pre></li>
 <li><p>Do your best to recreate the plot below.</p>
-<p><img src="02_session_files/figure-html/unnamed-chunk-7-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-9-1.png" width="100%" /></p>
 <ul>
 <li><p>Now, can you use the <code>FantasticFox1</code> palette from the <code>wesanderson</code> package to create the plot below?</p>
-<p><img src="02_session_files/figure-html/unnamed-chunk-8-1.png" width="100%" /></p></li>
+<p><img src="02_session_files/figure-html/unnamed-chunk-10-1.png" width="100%" /></p></li>
 </ul></li>
 <li><p>Save the ggplot from the last exercise as a square plot under the filename <code>plot1.jpg</code> inside of your RStudio project.</p></li>
 <li><p>What plots does the following code make? What does <code>.</code> do?</p>
@@ -505,27 +494,27 @@ ggplot(data = mpg) +
 <ol style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-10-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-12-1.png" width="100%" /></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-11-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-13-1.png" width="100%" /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-12-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-14-1.png" width="100%" /></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-13-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-15-1.png" width="100%" /></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-14-1.png" width="100%" /></p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-16-1.png" width="100%" /></p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li></li>
 </ol>
-<p><img src="02_session_files/figure-html/unnamed-chunk-15-1.png" width="100%" /></p></li>
+<p><img src="02_session_files/figure-html/unnamed-chunk-17-1.png" width="100%" /></p></li>
 </ol>
 </div>
 

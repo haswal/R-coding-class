@@ -35,30 +35,23 @@ cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1
 * Geometric objects (aka geoms)
 --> 
 
-<!-- ## Script -->
+## Script
 
-<!-- You can download both scripts from both halves of today's session, by clicking the links below. Feel free to combine these into a single script file to save in your RStudio project.  -->
+You can download the script from today's session, by clicking the link below. 
 
-<!--to add scripts -->
+```{r, include = FALSE, eval = FALSE}
 
-<!-- ```{r, echo = FALSE, eval = TRUE} -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-
-<!-- ```{r echo=FALSE, eval = TRUE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/session_02_desiree.R", "scripts/Session_2_hasse.R"),  -->
-<!--                   text = paste("Download Session 2 scripts"),  -->
-<!--                   name = paste0("02_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
-
-
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('session_02.R')
+```
 
 ## Cheatsheets
 
