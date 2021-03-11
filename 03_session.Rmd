@@ -1,0 +1,165 @@
+---
+title: "Session 3: Bar plots and intro to `dplyr`"
+date: "Mar 12, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+
+```
+
+
+## Agenda
+
+* Create bar plots with statistical summaries
+* Group bars by variable 
+* Subset data using `filter()` from the `dplyr` package
+* Rearrange your dataset by a variable's values
+* Writing functions
+
+
+<!-- ## Script -->
+
+<!-- Both scripts from Session 03 are available for download below. -->
+
+<!-- to add scripts -->
+
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_03_desiree.R", "scripts/Session_3_hasse.R"), -->
+<!--                   text = paste("Download Session 3 scripts"), -->
+<!--                   name = paste0("03_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+
+
+
+## Cheatsheets
+
+* [dplyr](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+## Resources
+
+Most of what we cover today will be based off of Chapter 3, sections 3.7 - 3.9 (plotting) , Chapter 5, sections 5.1 - 5.3 (filter and arrange), as well as Chapter 19 (functions), in the R4DS textbook. 
+
+Learn more about the features that the `cowplot` packages has to offer [here](https://wilkelab.org/cowplot/index.html). The links under the "articles" dropdown menu are particularly useful, e.g. this [article on aligning plots](https://wilkelab.org/cowplot/articles/aligning_plots.html).
+
+
+## Giraffe Homework
+This week we will work through the *Mean, Median, and Mode* module on the website [Teacups, Giraffes, and Statistics](https://tinystats.github.io/teacups-giraffes-and-statistics/03_mean.html). Since the statistical concepts shown in this module are likely familiar to you, the most important part of the module will be to *Create your own function* to calculate the mean. The module also covers how to create a function to calculate the median, but this is a bit more involved from a coding perspective so do not feel discouraged if you find it complicated. If you do want to write a median function, use `sort()` to order observations and `[...]` to find the values at specific positions in the vector. Read more about `sort()` [here](https://www.geeksforgeeks.org/sorting-of-a-vector-in-r-programming-sort-function/), and how to use square brackets in R to subset vectors [here](http://www.simonqueenborough.info/R/basic/lessons/Subsetting_Vectors.html). The reason why `filter()` and `arrange()` can't be used within the function(s) you will create has to do with the difference between data frames and vectors; something we will talk about more in the future. 
+
+Work with the `Giraffe_heights.csv` data from last week as input, and `filter()` to only include observations from island 1. In addition,  use the `$` operator to only include the *Height* column from this data set, and turning it into a vector, when trying out your brand new function. You might also want to take a look at the *Intro to R* module when working on the homework. 
+
+
+## Exercises
+
+The exercises for this week are below. I suggest that you create a new R script to work through the answers. You should save your Exercises script in your RStudio Project for this workshop. 
+
+You'll first need to load the appropriate package libraries and read in the data `cyto_data_small`, though some exercises may require you to work with the pivoted version of this data set. 
+
+```{r, echo = FALSE, message = FALSE, warning= FALSE}
+library(cowplot)
+cyto_data_small <- read_csv(file="Cytokine-Results_small.csv", skip = 1)
+```
+
+1. Recreate the R code necessary to generate the following graphs as output using the `cowplot` package, and specifically `plot_grid()`. 
+
+    ```{r, echo = FALSE, eval = TRUE, message = FALSE, fig.width = 4, fig.height = 3, out.width = "100%", warning = FALSE}
+    p1 <- ggplot(data = cyto_data_small, mapping = aes(x = TP, y = `FGF-2`)) + 
+      geom_point() + 
+      geom_smooth()
+    
+    p2 <- ggplot(data = cyto_data_small, mapping = aes(x = TP, y = CD40L)) + 
+      geom_point() + 
+      geom_smooth()
+    
+    plot_grid(p1, p2, labels = "AUTO")
+    
+    ```
+
+1. Create a bar plot showing the *median* cytokine concentrations for `BLC` across timepoints.
+
+1. Recreate the R code necessary to generate the following: 
+ 
+    ```{r, echo = FALSE, eval = TRUE, fig.width = 4, fig.height = 3, out.width = "100%", warning = FALSE}
+    
+    cyto_data_sl <- pivot_longer(cyto_data_small, cols = 5:9, names_to = "Cytokines", values_to = "Concentration")
+    
+    ggplot(data = cyto_data_sl, mapping = aes(x = TP, y = Concentration, fill = Cytokines)) +
+      geom_bar(stat = "summary", fun = "mean", position = "dodge")
+    
+    ```
+
+1. In session 3, we showed you how to add standard error bars to your plot. See if you can add "confidence interval" bars to the plot you constructed above by checking out [this link](https://stackoverflow.com/questions/19258460/standard-error-bars-using-stat-summary) and setting `fun.data =` to something other than `mean_se`.
+
+
+1. Using the `cyto_data_small` dataset, which observations of `BLC` have values greater than 68?
+
+1. Which observations of `BLC` have values between 68 and 100, inclusive?
+
+1. Which observations had non-zero concentrations of Eotaxin and CD40L?
+
+1. Find all the observations that were from `RFa14` or `RSb14`.
+
+1. Find all the observations where the `BLC` value is more than three times the value of `Eotaxin`.
+
+1. Which observations had missing values for concentration across any of the cytokines? (Think about whether it is better to use wide or long formatted data to answer this.)
+
+1. Find the observation with the highest concentration of all cytokines. 
+
+1. How could you use `arrange()` to sort all missing concentrations to the top of the data set? (Hint: use `is.na()`)
+
+1. Imagine that you are presented with the ggplot below, which displays all observations from `cyto_data_sl`. You would like to drop the individual observation that is highlighted and instead create a bar plot which displays the average cytokine concentration at each timepoint. How would you identify this observation, remove it, and create your new plot using the modified data set?
+
+    ```{r, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+
+ggplot(data = cyto_data_sl, mapping = aes(x = TP, y = Concentration, color = Monkey)) +
+  geom_jitter(width = 0.15, alpha = 0.5) +
+  annotate("segment", x = 3, xend = 2.2, y = 900, yend = 1060, colour = "orchid", size=2, alpha=0.8, arrow=arrow())
+    
+    ```
+
+1. Combine multiple skills that you've learned to recreate the plot below:
+
+    ```{r, echo = FALSE, eval = TRUE, warning = FALSE, message = FALSE}
+    
+    p1 <- ggplot(data = filter(cyto_data_small, TP %in% 2:6), 
+                 mapping = aes(x = TP, y = `FGF-2`)) +
+      geom_point(mapping = aes(color = Monkey)) +
+      geom_smooth() +
+      labs(x = "Timepoint")+
+      theme_classic() 
+    
+    p2 <- ggplot(data = filter(cyto_data_small, Monkey != "RFv13"), 
+                 mapping = aes( x = TP, y = CD40L, color = Monkey)) +
+            geom_smooth(se = FALSE) +
+            labs(x = "Timepoint")+
+            theme_classic()
+    
+    p3 <- ggplot(data = filter(cyto_data_sl, Cytokines != "BLC"), mapping = aes(x = TP, y = Concentration, fill = Cytokines)) +
+      geom_bar(stat = "summary", fun = "mean", position = "dodge") +
+      geom_errorbar(stat = "summary", fun.data = "mean_se", position = "dodge") +
+      labs(x = "Timepoint")
+
+    
+      plot_grid(p1, p2, p3, labels = "AUTO")
+  
+    ```
+    
+    
+
+
+
+
