@@ -21,28 +21,23 @@ cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1
 * Writing functions
 
 
-<!-- ## Script -->
+## Script
 
-<!-- Both scripts from Session 03 are available for download below. -->
+You can download the script from session 3 by clicking the link below. 
 
-<!-- to add scripts -->
+```{r, include = FALSE, eval = FALSE}
 
-<!-- ```{r, include = TRUE, echo = FALSE} -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-
-<!-- ```{r include = TRUE, echo = FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/session_03_desiree.R", "scripts/Session_3_hasse.R"), -->
-<!--                   text = paste("Download Session 3 scripts"), -->
-<!--                   name = paste0("03_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('session_03.R')
+```
 
 
 
