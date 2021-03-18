@@ -11,7 +11,7 @@
 
 
 
-<title>Resources</title>
+<title>Session 4: dplyr, part 2</title>
 
 <script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -398,37 +398,100 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Resources</h1>
+<h1 class="title toc-ignore">Session 4: <code>dplyr</code>, part 2</h1>
+<h4 class="date">Mar 19, 2021</h4>
 
 </div>
 
 
-<p>Here you can find links to the reference text and other helpful guides and examples.</p>
-<div id="textbook-r-for-data-science" class="section level3">
-<h3>Textbook: R for Data Science</h3>
-<p><a href="https://r4ds.had.co.nz/">R For Data Science</a> is a <strong>free</strong> online text by Hadley Wickham and Garrett Grolemund. This is our workshop textbook. We won’t use this book chapter by chapter necessarily, but we will base many of our exercises off of this text.</p>
-<p><a href="https://r4ds.had.co.nz/"><img src="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" style="width:25.0%" /></a></p>
-<!-- ### Twitte`R` -->
-<!-- The `#rstats` community on Twitter is highly active and a great resource for learning and sharing all things R. Check it out! -->
-<!-- https://twitter.com/hashtag/rstats?lang=en -->
-<!-- ### TidyTuesday -->
-<!-- An interesting and new data set each week to practice transforming and plotting.  -->
-<!-- https://github.com/rfordatascience/tidytuesday -->
-<!-- Folks often share their plots (and link to their R code) on Twitter with [#tidytuesday](https://twitter.com/search?q=tidytuesday&src=typed_query&f=live). -->
-<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tune in today at 🚨 7 PM ET 🚨 for another LIVE <a href="https://twitter.com/hashtag/tidytuesday?src=hash&amp;ref_src=twsrc%5Etfw">#tidytuesday</a> screencast. We&#39;ll be analyzing extinct plants! 🌱🌿🍁🍂<br><br>This week only is two hours LATER than the usual screencasts (so if you&#39;re in Australia, now&#39;s your chance to join live!) 😉 🇦🇺<a href="https://t.co/GJURrXOtD4">https://t.co/GJURrXOtD4</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/1295809704145424391?ref_src=twsrc%5Etfw">August 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
-<!-- ### RStudio Education Website -->
-<!-- [https://education.rstudio.com/](https://education.rstudio.com/) - This site has a good, curated set of helpful links to help you start or learn how to do more with R. -->
-<!-- ### Interactive Practice -->
-<!-- [RStudio Cloud Primers](https://rstudio.cloud/learn/primers) - These are some short exercises that use interactive windows for practicing specific skills.  -->
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
+<ul>
+<li>Subset columns using <code>select()</code> from the <code>dplyr</code> package</li>
+<li>Create new variables with <code>mutate()</code></li>
+<li>Create grouped summaries with <code>summarise()</code></li>
+</ul>
+<!-- ## Script -->
+<!-- The script from Session 04 is available for download below. -->
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_04_desiree.R", "scripts/Session_4_hasse.R"),  -->
+<!--                   text = paste("Download Session 4 scripts"),  -->
+<!--                   name = paste0("04_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
 </div>
-<div id="teacups-giraffes-statistics" class="section level3">
-<h3>Teacups, Giraffes, &amp; Statistics</h3>
-<p><a href="https://tinystats.github.io/teacups-giraffes-and-statistics/" class="uri">https://tinystats.github.io/teacups-giraffes-and-statistics/</a></p>
-<!-- ### Other websites -->
-<!-- All of the links below are sites built using R.  -->
-<!-- * A book: https://smltar.com/ -->
-<!-- * A blog: http://desiree.rbind.io/ -->
-<!-- * A project site: https://www.tidymodels.org/ -->
+<div id="cheatsheets" class="section level2">
+<h2>Cheatsheets</h2>
+<ul>
+<li><a href="https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">dplyr</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>The content for session 4 will be based off of the rest of Chapter 5, beginning with section 5.4.</p>
+<p>You may also find this blog post useful about <code>select()</code>, <code>relocate()</code> , and <code>rename()</code> – and some of the other ways you can apply them: <a href="https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-select-rename-relocate/" class="uri">https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-select-rename-relocate/</a>.</p>
+</div>
+<div id="giraffe-homework" class="section level2">
+<h2>Giraffe Homework</h2>
+<p>This week we will continue with the <a href="https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html">Spread of the Data</a> module. Go through the materials and make sure you create your own functions to calculate the variance and standard deviation of any vector.</p>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<p>The exercises for this week are below.</p>
+<p>You’ll first need to load the appropriate package libraries and read in the data (Cytokine-Results_MULTIPL.615133.xlsx) you will use for the exercises.</p>
+<ol style="list-style-type: decimal">
+<li><p>Select all non-cytokine columns using at least two different ways.</p></li>
+<li><p>Select all interleukin cytokines.</p></li>
+<li><p>Select all interleukin <em>and</em> interferon cytokines.</p></li>
+<li><p>Use <code>num_range()</code> to select the following cytokines: <code>IL-4</code>, <code>IL-5</code>,<code>IL-6</code>,<code>IL-7</code>, <code>IL-8</code>.</p></li>
+<li><p>Select all columns except those with beta symbols.</p></li>
+<li><p>What happens if you include the name of a variable multiple times in a <code>select()</code> call?</p></li>
+<li><p>What does the <code>any_of()</code> function do when used within <code>select()</code>? Why might it be helpful in conjunction with this vector?</p>
+<pre class="r"><code>vars &lt;- c(&quot;LIMS Barcode&quot;, &quot;RANTES&quot;, &quot;Eotaxin&quot;, &quot;BLC&quot;, &quot;IFNα&quot;)</code></pre></li>
+<li><p>Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?</p>
+<pre class="r"><code>select(cyto_data, contains(&quot;rantes&quot;))</code></pre></li>
+<li><p>Create a new variable <code>IFN_sum</code>, made up of the total concentration of interferon cytokines.</p></li>
+<li><p>Mean-center (subtract the mean values from all the individual observations) the <code>TRAIL</code> variable. What is the mean of this new variable?</p></li>
+<li><p>Create a new column representing the sums of TNFα and TNFβ. Then, using this new variable, create another new column containing the mean TNF expression for each observation. Only use one <code>mutate()</code> function to create both columns.</p></li>
+<li><p>What does <code>1:3 + 1:10</code> return? Why?</p></li>
+<li><p>Use <code>group_by()</code> to calculate the mean concentration of <code>RANTES</code> per Monkey, and call the column with the values <code>RANTES_mean</code>.</p></li>
+<li><p>Come up with another approach that will give you the same output as <code>cyto_data %&gt;% count(TP)</code> (without using <code>count()</code>).</p></li>
+<li><p>What does the <code>sort</code> argument to <code>count()</code> do. When might you use it?</p></li>
+<li><p>Calculate the average concentration at each time point of <code>BLC</code> and the average concentration at each time point of <code>RANTES</code>. Use pipes to link together <code>select()</code>, <code>pivot_longer()</code>, <code>group_by()</code>, and <code>summarise()</code> in a single compound expression.</p></li>
+<li><p>Mean-center the <code>BLC</code> variable per time point (calculate the mean per time point), and then arrange the output so that time points of the same value are shown together. To do this, use pipes to link together <code>group_by()</code>, <code>transmute()</code>, <code>arrange()</code> in a single compound expression.</p></li>
+<li><p>Replicate the output in the table below, using a combination of your <code>dplyr</code> skills and the pipe operator.</p>
+<pre><code>## # A tibble: 20 x 3
+## # Groups:   Monkey [5]
+##    Monkey Cytokines standard_deviation
+##    &lt;chr&gt;  &lt;chr&gt;                  &lt;dbl&gt;
+##  1 RMe14  PDGF-BB                 3.69
+##  2 RSb14  Eotaxin                 8.00
+##  3 RIc14  Eotaxin                10.7 
+##  4 RMe14  Eotaxin                15.6 
+##  5 RFa14  Eotaxin                18.1 
+##  6 RIc14  PDGF-BB                26.8 
+##  7 RFa14  PDGF-BB                54.9 
+##  8 RSb14  PDGF-BB                65.0 
+##  9 RFv13  PDGF-BB                79.4 
+## 10 RSb14  VCAM-1                103.  
+## 11 RMe14  MIF                   124.  
+## 12 RIc14  MIF                   127.  
+## 13 RIc14  VCAM-1                137.  
+## 14 RFv13  Eotaxin               147.  
+## 15 RMe14  VCAM-1                159.  
+## 16 RFa14  VCAM-1                182.  
+## 17 RFa14  MIF                   353.  
+## 18 RSb14  MIF                   381.  
+## 19 RFv13  VCAM-1                640.  
+## 20 RFv13  MIF                  3299.</code></pre></li>
+</ol>
 </div>
 
 

@@ -1,0 +1,121 @@
+---
+title: "Session 4: `dplyr`, part 2"
+date: "Mar 19, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+
+```
+
+
+## Agenda
+
+* Subset columns using `select()` from the `dplyr` package
+* Create new variables with `mutate()`
+* Create grouped summaries with `summarise()`
+
+<!-- ## Script -->
+
+<!-- The script from Session 04 is available for download below. -->
+
+
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_04_desiree.R", "scripts/Session_4_hasse.R"),  -->
+<!--                   text = paste("Download Session 4 scripts"),  -->
+<!--                   name = paste0("04_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+
+
+## Cheatsheets
+
+* [dplyr](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+## Resources
+
+The content for session 4 will be based off of the rest of Chapter 5, beginning with section 5.4. 
+
+You may also find this blog post useful about `select()`, `relocate()` , and `rename()` -- and some of the other ways you can apply them: https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-select-rename-relocate/. 
+
+## Giraffe Homework
+This week we will continue with the [Spread of the Data](https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html) module. Go through the materials and make sure you create your own functions to calculate the variance and standard deviation of any vector. 
+
+## Exercises
+
+The exercises for this week are below. 
+
+You'll first need to load the appropriate package libraries and read in the data (Cytokine-Results_MULTIPL.615133.xlsx) you will use for the exercises. 
+
+```{r, echo = FALSE, message = FALSE, warning= FALSE, eval = TRUE}
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+```
+
+1. Select all non-cytokine columns using at least two different ways.
+
+1. Select all interleukin cytokines.
+
+1. Select all interleukin *and* interferon cytokines.
+
+1. Use `num_range()` to select the following cytokines: `IL-4`, `IL-5`,`IL-6`,`IL-7`, `IL-8`.
+
+1. Select all columns except those with beta symbols.
+
+1. What happens if you include the name of a variable multiple times in a `select()` call?
+
+1. What does the `any_of()` function do when used within `select()`? Why might it be helpful in conjunction with this vector? 
+
+    ```{r, echo = TRUE, eval = FALSE}
+    vars <- c("LIMS Barcode", "RANTES", "Eotaxin", "BLC", "IFNα")
+    ```
+
+1. Does the result of running the following code surprise you? How do the select helpers deal with case by default? How can you change that default?
+
+    ```{r, eval = FALSE, echo = TRUE}
+    select(cyto_data, contains("rantes"))
+    ```
+    
+1. Create a new variable `IFN_sum`, made up of the total concentration of interferon cytokines.
+
+
+1. Mean-center (subtract the mean values from all the individual observations) the `TRAIL` variable. What is the mean of this new variable?
+
+1. Create a new column representing the sums of TNFα and TNFβ. Then, using this new variable, create another new column containing the mean TNF expression for each observation. Only use one `mutate()` function to create both columns.
+
+1. What does `1:3 + 1:10` return? Why?
+
+
+1. Use `group_by()` to calculate the mean concentration of `RANTES` per Monkey, and call the column with the values `RANTES_mean`.
+
+1. Come up with another approach that will give you the same output as `cyto_data %>% count(TP)` (without using `count()`).
+
+1. What does the `sort` argument to `count()` do. When might you use it?
+
+
+1. Calculate the average concentration at each time point of `BLC` and the average concentration at each time point of `RANTES`. Use pipes to link together `select()`, `pivot_longer()`, `group_by()`, and `summarise()` in a single compound expression.  
+
+1. Mean-center the `BLC` variable per time point (calculate the mean per time point), and then arrange the output so that time points of the same value are shown together. To do this, use pipes to link together `group_by()`, `transmute()`, `arrange()` in a single compound expression.
+
+1. Replicate the output in the table below, using a combination of your `dplyr` skills and the pipe operator.
+
+    ```{r, echo = FALSE, message = FALSE}
+    cyto_data %>%
+      select(TP, Monkey, `PDGF-BB`, `VCAM-1`, Eotaxin, MIF) %>%
+      pivot_longer(cols = 3:6, names_to = "Cytokines", values_to = "Concentration") %>%
+      group_by(Monkey, Cytokines) %>%
+      summarise(standard_deviation = sd(Concentration)) %>%
+      arrange(standard_deviation)
+    ```
