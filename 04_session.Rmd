@@ -18,27 +18,23 @@ cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1
 * Create new variables with `mutate()`
 * Create grouped summaries with `summarise()`
 
-<!-- ## Script -->
+## Script
 
-<!-- The script from Session 04 is available for download below. -->
+You can download the script from session 4 by clicking the link below. 
 
+```{r, include = FALSE, eval = FALSE}
 
-<!-- ```{r, include = TRUE, echo = FALSE} -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-
-<!-- ```{r include = TRUE, echo = FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/session_04_desiree.R", "scripts/Session_4_hasse.R"),  -->
-<!--                   text = paste("Download Session 4 scripts"),  -->
-<!--                   name = paste0("04_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('session_04.R')
+```
 
 
 ## Cheatsheets
