@@ -17,6 +17,8 @@ navbar:
           href: 03_session.html
         - text: "Session 4"
           href: 04_session.html
+        - text: "Session 5"
+          href: 05_session.html
 output: 
   html_document: 
     theme: flatly

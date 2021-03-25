@@ -1,0 +1,252 @@
+---
+title: "Session 5: Wrangling Data + Strings"
+date: "Mar 26, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+
+```
+
+
+## Agenda
+
+* Create toy data sets with `tibble()` and `tribble()`
+* Define "tidy" data
+* Make your data "wider" with `pivot_wider()`
+* Combine two data sets into one with `*_join()` functions
+* Output data to a CSV
+* Manipulate strings in your data with `stringr` and regular expressions
+
+<!-- ## Script -->
+
+<!-- Both scripts from Session 05 are available for download below. -->
+
+
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_05_desiree.R", "scripts/Session_5_hasse.R"),  -->
+<!--                   text = paste("Download Session 5 scripts"),  -->
+<!--                   name = paste0("05_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+
+
+## Cheatsheets
+
+* [tidyr & data import](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf)
+* [stringr](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf)
+* [regular expressions](https://github.com/rstudio/cheatsheets/raw/master/regex.pdf) by Ian Kopacka.
+
+## Resources
+
+Content for session 5 will be based off of the majority of Part II Wrangle ([Chapters 9-14](https://r4ds.had.co.nz/wrangle-intro.html)) in the text. 
+
+This may sound like a lot of new content, but we've actually covered many of the subsections already, so it's not as much new material as it appears to be.
+
+## Giraffe Homework
+This week we will continue with the [Covariance and Correlation](https://tinystats.github.io/teacups-giraffes-and-statistics/05_correlation.html) module.
+
+The thing I want you to focus on this week is writing functions to calculate covariance and correlation, this time using `dplyr` functions and pipes (`%>%`). In the functions I have created, I use `mutate()`, `summarize()`, and `select()`, but other combinations of functions could also work. You will also need to use the function `nrow()` to count the number of observations (N in the equation on the website), as well as `mean()` and `sum()`. 
+
+One important difference from how these functions are created on the website, is that I want you to make the functions a bit more flexible, by allowing users to input both the data they want to use as well as the to columns to use for the calculations (e.g. `my_covariance <- function(data, x, y){}`). There is an issue with specifying column names when running "homemade" functions and a trick (shown in the code chunk below) will be needed. For the function to successfully "send" the input for column names, this part will have to be included within *double* curly brackets (`{{}}`) when specified in the "body" of the function: 
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+cyto_small <- read_csv("Cytokine-Results_small.csv", 
+                       skip = 1)
+
+a_mean_function <- function(data, column){
+  result <- data %>% 
+    summarise(mean = mean({{column}}))
+  return(result)
+}
+
+a_mean_function(cyto_small, BLC)
+```
+
+To download the data used on the website, click the link below:
+
+```{r, include = FALSE, eval = FALSE}
+
+# install and load these packages
+devtools::install_github('yihui/xfun')
+
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('giraffe_data.csv')
+```
+
+## Exercises
+
+The exercises for session 5 are below. 
+
+1. Create a tibble that combines the following vectors:
+
+    ```{r tibble, echo = TRUE, eval = TRUE}
+    x <- c(1, 5, 7, 2, 7)
+    y <- 1:5
+    z <- c(TRUE, FALSE, FALSE, TRUE, TRUE)
+    ```
+
+
+2. Recreate the table below using the `tribble()` function:
+
+    ```{r fruits, echo = FALSE, eval = TRUE}
+    tribble(
+      ~a, ~b, ~fruits,
+      1,  4.9, "apple",
+      4,  6.0, "orange"
+    )
+    ```
+
+3. Why does this code fail?
+
+    ```{r pivotfail, echo = TRUE, eval = FALSE}
+    table4a %>% 
+      pivot_longer(c(1999, 2000), names_to = "year", values_to = "cases")
+    #> Error: Can't subset columns that don't exist.
+    #> ✖ The locations 1999 and 2000 don't exist.
+    #> ℹ There are only 3 columns.
+    ```
+
+
+4. What would happen if you "widen" this table? What causes the problem? (You don't have to solve it.)
+
+    ```{r people, echo = TRUE, eval = FALSE}
+      people <- tribble(
+      ~name,             ~names,  ~values,
+      "Phillip Woods",   "age",       45,
+      "Phillip Woods",   "height",   186,
+      "Phillip Woods",   "age",       50,
+      "Jessica Cordero", "age",       37,
+      "Jessica Cordero", "height",   156
+    )
+    ```
+ 
+    
+5. Tidy the simple tibble below. Do you need to make it wider or longer? What are the variables?
+
+    ```{r mice, echo = TRUE, eval = TRUE }
+    mice <- tribble(
+      ~wildtype, ~male, ~female,
+      "yes",     NA,    10,
+      "no",      20,    12
+    )
+    ```
+   
+    
+6. Both `unite()` and `separate()` have a `remove` argument. What does it do? Why would you set it to `FALSE`?
+
+  
+
+7. [Section 12.6](https://r4ds.had.co.nz/tidy-data.html#case-study) in the textbook contains a case study with data that needs tidying. Follow along and run the code examples in your own script in parallel with the explanations in the text. There's no need complete the exercises related to the case study (#1-4). 
+
+    Finally, use the tidied data you produce to create a visualization of how the global TB cases vary by year and sex. 
+
+    ```{r casestudy, echo = FALSE, eval = FALSE}
+    
+    # Tidying
+    who_tidy <- who %>%
+            pivot_longer(
+              cols = new_sp_m014:newrel_f65, 
+              names_to = "key", 
+              values_to = "cases", 
+              values_drop_na = TRUE
+            ) %>% 
+            mutate(
+              key = stringr::str_replace(key, "newrel", "new_rel")
+            ) %>%
+            separate(key, c("new", "var", "sexage")) %>% 
+            select(-new, -iso2, -iso3) %>% 
+            separate(sexage, c("sex", "age"), sep = 1)
+    
+    # visualize 
+    who_tidy  %>% 
+      group_by(year, sex) %>% 
+      summarise(sum_cases = sum(cases)) %>%
+      ggplot(aes(x = year, y = sum_cases, fill = sex)) + 
+      geom_bar(position = "dodge", stat = "identity") 
+    
+    ```
+
+8. Identify the keys (for joining) in the following datasets:
+
+    * `Lahman::Batting`
+    * `babynames::babynames`
+    * `nasaweather::atmos`
+    * `fueleconomy::vehicles`
+    * `ggplot2::diamonds`
+    
+    (You might need to install some packages and read some documentation.)
+
+    
+9. Copy and paste the tribbles below into your own script to answer the following three questions. 
+    ```{r superheroes, echo = TRUE, eval = TRUE}
+    library(tidyverse) ## dplyr provides the join functions
+    
+    superheroes <- tibble::tribble(
+           ~name, ~alignment,  ~gender,          ~publisher,
+       "Magneto",      "bad",   "male",            "Marvel",
+         "Storm",     "good", "female",            "Marvel",
+      "Mystique",      "bad", "female",            "Marvel",
+        "Batman",     "good",   "male",                "DC",
+         "Joker",      "bad",   "male",                "DC",
+      "Catwoman",      "bad", "female",                "DC",
+       "Hellboy",     "good",   "male", "Dark Horse Comics"
+      )
+    
+   publisher_info <- tibble::tribble(
+      ~publisher, ~yr_founded,
+            "DC",       1934,
+        "Marvel",       1939,
+         "Image",       1992
+      )
+    ```
+    
+    a. Merge the two datasets, keeping all observations from the superheroes dataset.
+    
+
+    b. Merge the two datasets, keeping all observations from the `publisher_info` dataset. How does `join` handle duplicate keys in this case?
+    
+
+    c. Merge the two datasets, ensuring that no observations are dropped.
+    
+    
+    
+10. In your own words, describe the difference between the `sep`and `collapse` arguments to `str_c`.
+
+
+11. What does `str_wrap()` do? When might you want to use it?
+
+   
+12. How would you match the literal string `"$^$"`?
+
+
+
+13. Replace all forward slashes in the string below with backslashes:
+
+    ```
+    past/present/future
+    ```
+   
+14. Using the `flu_data.txt` dataset, calculate the proportion of `Strains` including the string `"H1N1"`, both with and without parentheses.
+
+
+15. Using the `flu_data.txt` dataset, clean the `Strains` column so that all "Victoria" strains are labeled with the exact same string. 

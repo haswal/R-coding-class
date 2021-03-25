@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Session 5: Wrangling Data + Strings</title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Marcus R Coding Class</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Getting Started</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Sessions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_session.html">Session 1</a>
+    </li>
+    <li>
+      <a href="02_session.html">Session 2</a>
+    </li>
+    <li>
+      <a href="03_session.html">Session 3</a>
+    </li>
+    <li>
+      <a href="04_session.html">Session 4</a>
+    </li>
+    <li>
+      <a href="05_session.html">Session 5</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Session 5: Wrangling Data + Strings</h1>
+<h4 class="date">Mar 26, 2021</h4>
+
+</div>
+
+
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
+<ul>
+<li>Create toy data sets with <code>tibble()</code> and <code>tribble()</code></li>
+<li>Define “tidy” data</li>
+<li>Make your data “wider” with <code>pivot_wider()</code></li>
+<li>Combine two data sets into one with <code>*_join()</code> functions</li>
+<li>Output data to a CSV</li>
+<li>Manipulate strings in your data with <code>stringr</code> and regular expressions</li>
+</ul>
+<!-- ## Script -->
+<!-- Both scripts from Session 05 are available for download below. -->
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/session_05_desiree.R", "scripts/Session_5_hasse.R"),  -->
+<!--                   text = paste("Download Session 5 scripts"),  -->
+<!--                   name = paste0("05_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+</div>
+<div id="cheatsheets" class="section level2">
+<h2>Cheatsheets</h2>
+<ul>
+<li><a href="https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf">tidyr &amp; data import</a></li>
+<li><a href="https://github.com/rstudio/cheatsheets/raw/master/strings.pdf">stringr</a></li>
+<li><a href="https://github.com/rstudio/cheatsheets/raw/master/regex.pdf">regular expressions</a> by Ian Kopacka.</li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Content for session 5 will be based off of the majority of Part II Wrangle (<a href="https://r4ds.had.co.nz/wrangle-intro.html">Chapters 9-14</a>) in the text.</p>
+<p>This may sound like a lot of new content, but we’ve actually covered many of the subsections already, so it’s not as much new material as it appears to be.</p>
+</div>
+<div id="giraffe-homework" class="section level2">
+<h2>Giraffe Homework</h2>
+<p>This week we will continue with the <a href="https://tinystats.github.io/teacups-giraffes-and-statistics/05_correlation.html">Covariance and Correlation</a> module.</p>
+<p>The thing I want you to focus on this week is writing functions to calculate covariance and correlation, this time using <code>dplyr</code> functions and pipes (<code>%&gt;%</code>). In the functions I have created, I use <code>mutate()</code>, <code>summarize()</code>, and <code>select()</code>, but other combinations of functions could also work. You will also need to use the function <code>nrow()</code> to count the number of observations (N in the equation on the website), as well as <code>mean()</code> and <code>sum()</code>.</p>
+<p>One important difference from how these functions are created on the website, is that I want you to make the functions a bit more flexible, by allowing users to input both the data they want to use as well as the to columns to use for the calculations (e.g. <code>my_covariance &lt;- function(data, x, y){}</code>). There is an issue with specifying column names when running “homemade” functions and a trick (shown in the code chunk below) will be needed. For the function to successfully “send” the input for column names, this part will have to be included within <em>double</em> curly brackets (<code>{{}}</code>) when specified in the “body” of the function:</p>
+<pre class="r"><code>library(tidyverse)
+cyto_small &lt;- read_csv(&quot;Cytokine-Results_small.csv&quot;, 
+                       skip = 1)
+
+a_mean_function &lt;- function(data, column){
+  result &lt;- data %&gt;% 
+    summarise(mean = mean({{column}}))
+  return(result)
+}
+
+a_mean_function(cyto_small, BLC)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##    mean
+##   &lt;dbl&gt;
+## 1  122.</code></pre>
+<p>To download the data used on the website, click the link below:</p>
+<a href="data:text/csv;base64,SGVpZ2h0cyxDZWxlcnlfRWF0ZW4KNy4wMzg4NjQ4MTAxNjEyNzIsMTYuMzYxMjg5NTc1MjkxMzQKMTMuMTU0MzM4OTQzMTE3MjU4LDEwLjcyMzUzODU0MDcyNDU0CjguMDg2NTExMDQxODMxNDYzLDE3LjE2Nzk3ODQ4MDYxNgo4LjE1OTk4OTUwNDg4MjcxOCwyMi41MjExNDYzNTU4MDEwOTMKNi4wMDQ3MTU4MDYxMzczMTMsMTMuNzc5OTI5MTI0NjM1ODE0CjkuNDU1NDA3OTExNTAxNTQsMTYuOTIzMDQyOTc4NjA1MTQKOS4zNjkzMDI1NzcwNjQ0MzEsMTYuMzIxODgzMzQ1MjU0MjQKOC43NDM0ODk1MjY5NjQ5MjUsMTAuNDUxMDE2MzEyNzkwODc1CjkuNzg3MDcyMjMwMjU1ODExLDEzLjIxODIxMDA1MTU4NjI4CjEwLjg1NjAyOTYwNDQwNDcwOSwxNC4yMzA0MDkzMzY2Nzk5NzYKOC40NDQ1NjA4MzU3MDUxMSwxNi42Nzc4NjEzNjk2OTE5MDcKNy40MTIyMzU0MDQ3NzI3NjUsMTkuNjI1NzUzODY2MjE3NTA0CjguNDQwODY2OTgzODgxMTQyLDE4LjIzNzc5OTU0NTMyODk1NAoxMC4wMjM5MDM1MTcxMzA1OTcsMTQuNTU4ODMyNjM1MjE4MjUyCjkuNjk1MTY3NTI0MzU1NjY0LDE3LjA1NjkxNTQ1NzM5ODY2Nwo4LjU5MzA3MTQ5MTA0MjcxNiwxOC4wNzI0MDg0OTUxMTg1NgoxMi4zNzc3NTgzMTI1NTEzNCwxOC41NzA2MTY0MDU0NjQ3OQoxMC42ODEwMjQ1NDE2OTgzNzYsNS44NDgyMDczNTU5MjA5MDIKMTEuMDEzOTM2MzQ0NTE4MzMxLDE2LjM2NzQ5NzAwNjkwNjYyCjkuNDEzMzg5NzAxODM3MTc5LDE4LjM4MjI5NjQ5NjQyMzg2CjEwLjQ0NzI4MjgzMDc1MjU0NywxMS42ODE1NDg3NTE4NTU0MDIKMTQuMDE0NDAyOTEzODkwODczLDExLjIyMjYzMjE4Mjc4MjkxNwoxMi4wMjM5NTgyMzYxMzQyOTEsMTAuNjIzMjEwNzA2NzkyMDM3CjkuMzk1MDgxNTA5NjYzNDcsMTMuNzk4MDA3MTMzMDMzMjU2CjcuOTQ5NTEwMzIxOTcyNjc4LDE1LjM0NzgwOTc1NTA4Mjk5Mgo5LjQ2NTIzMDM0MDAxMTQzNiwxMi4xNzIxNzQ0ODk2Njk2MDEKOS42MDE3ODg2Nzc3NzA0NzUsOS44NDM1NjgzNzAzNzI3MjQKMTAuMjYyMjQ1MTkwODQ4NzUsMTIuMzM0OTU4NTM0NjU4MjYzCjEwLjI5MTU5OTc5MTA4NzQwMiwxNS40MzAyNjA4MjU0Mzc5OAoxMC43MjQxMjk0NDIyMzQ0NTgsMTIuNjQxMjU3MDgzNTA4NTEzCjExLjM0Nzk2MjMyNzYwMDk1LDEyLjcyMjM2MTY0ODQ1NjM5OQoxNC4xNDQwNzE1MzYzMDExMzcsNS44MjU4MzE5MzI2MzIwMjYKOC45MTc5NDI3MDE4NzcwNDksMTQuMTUxMDY0MTI4MjE4MTgKNy44NTkwMTU2ODMzNzU3OTQ1LDE5LjgyMDg0NzIzNjA0OTUyCjkuMjU1MDg2NTM1NDQzNDU1LDE0LjQ3Mjk3OTg0ODI2ODk3NAo5LjAyOTcxNzI5MDQyMzQ0OSwxNy44NjE3MjI1NTM3MDc5NgoxMC41NDk1NjgzNTY5NTE0MTgsMTIuNzk5NTcwNTUxMDg5ODc5CjkuMDQwOTc0ODc2ODM1NCwxOC42MDIyMDUzOTE0MjczMQoxMS41OTYyMTA2NTIyNTA3NSwxMC42MTA3OTgyNTE4ODQxNDMKNy45OTEwOTc1OTUyMjI1NjYsMTIuMzMwNjc0NjAyNDkxOTgyCjEwLjIwOTk2ODQ2NjEzOTY3NiwxNS4wMTYwNzM1OTU4MDUxOTYKNy42ODgwMTQyMTk2MTU3ODYsMTIuNTI0MzM3MjIwNzE3MTYxCjExLjE1NjI2OTI1MzkxNTcxMiwxNS45ODcwMTgxNTAxNzAyODIKNi44MDg3NDg2ODc2MTI5NTEsMTcuMTYwMTUwMTc0NzYzMzA2CjkuMzgyOTkyNjg3NTg4MTcsMTguMDIzMjI0NzY4MzQ3MjAyCjEwLjg5ODkzMTg0NDI0NTE5NywxMS45MTc2MjQ0MDM4NTQ4NTkKOC4wNDU4OTM0MzQ3NDEyNTYsMTcuMTg4MDU5MjU5OTIxMQoxMC4zNzk5OTU3MTg3MzQ0OSwxMS4xNTQxMDk4ODg2Mzk3MgoxMS40NjI5MDY3MTQ2MDAzNTQsMTEuNzc3OTUwMjUzODQxNjQyCjkuMDE0ODAxNzc4NDkxNDEyLDExLjI3NTQwODAzMTE0MDA2Nwo=" download="giraffe_data.csv">Download giraffe_data.csv</a>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<p>The exercises for session 5 are below.</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a tibble that combines the following vectors:</p>
+<pre class="r"><code>x &lt;- c(1, 5, 7, 2, 7)
+y &lt;- 1:5
+z &lt;- c(TRUE, FALSE, FALSE, TRUE, TRUE)</code></pre></li>
+<li><p>Recreate the table below using the <code>tribble()</code> function:</p>
+<pre><code>## # A tibble: 2 x 3
+##       a     b fruits
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; 
+## 1     1   4.9 apple 
+## 2     4   6   orange</code></pre></li>
+<li><p>Why does this code fail?</p>
+<pre class="r"><code>table4a %&gt;% 
+  pivot_longer(c(1999, 2000), names_to = &quot;year&quot;, values_to = &quot;cases&quot;)
+#&gt; Error: Can&#39;t subset columns that don&#39;t exist.
+#&gt; ✖ The locations 1999 and 2000 don&#39;t exist.
+#&gt; ℹ There are only 3 columns.</code></pre></li>
+<li><p>What would happen if you “widen” this table? What causes the problem? (You don’t have to solve it.)</p>
+<pre class="r"><code>  people &lt;- tribble(
+  ~name,             ~names,  ~values,
+  &quot;Phillip Woods&quot;,   &quot;age&quot;,       45,
+  &quot;Phillip Woods&quot;,   &quot;height&quot;,   186,
+  &quot;Phillip Woods&quot;,   &quot;age&quot;,       50,
+  &quot;Jessica Cordero&quot;, &quot;age&quot;,       37,
+  &quot;Jessica Cordero&quot;, &quot;height&quot;,   156
+)</code></pre></li>
+<li><p>Tidy the simple tibble below. Do you need to make it wider or longer? What are the variables?</p>
+<pre class="r"><code>mice &lt;- tribble(
+  ~wildtype, ~male, ~female,
+  &quot;yes&quot;,     NA,    10,
+  &quot;no&quot;,      20,    12
+)</code></pre></li>
+<li><p>Both <code>unite()</code> and <code>separate()</code> have a <code>remove</code> argument. What does it do? Why would you set it to <code>FALSE</code>?</p></li>
+<li><p><a href="https://r4ds.had.co.nz/tidy-data.html#case-study">Section 12.6</a> in the textbook contains a case study with data that needs tidying. Follow along and run the code examples in your own script in parallel with the explanations in the text. There’s no need complete the exercises related to the case study (#1-4).</p>
+<p>Finally, use the tidied data you produce to create a visualization of how the global TB cases vary by year and sex.</p></li>
+<li><p>Identify the keys (for joining) in the following datasets:</p>
+<ul>
+<li><code>Lahman::Batting</code></li>
+<li><code>babynames::babynames</code></li>
+<li><code>nasaweather::atmos</code></li>
+<li><code>fueleconomy::vehicles</code></li>
+<li><code>ggplot2::diamonds</code></li>
+</ul>
+<p>(You might need to install some packages and read some documentation.)</p></li>
+<li><p>Copy and paste the tribbles below into your own script to answer the following three questions.</p>
+<pre class="r"><code>library(tidyverse) ## dplyr provides the join functions
+
+superheroes &lt;- tibble::tribble(
+       ~name, ~alignment,  ~gender,          ~publisher,
+   &quot;Magneto&quot;,      &quot;bad&quot;,   &quot;male&quot;,            &quot;Marvel&quot;,
+     &quot;Storm&quot;,     &quot;good&quot;, &quot;female&quot;,            &quot;Marvel&quot;,
+  &quot;Mystique&quot;,      &quot;bad&quot;, &quot;female&quot;,            &quot;Marvel&quot;,
+    &quot;Batman&quot;,     &quot;good&quot;,   &quot;male&quot;,                &quot;DC&quot;,
+     &quot;Joker&quot;,      &quot;bad&quot;,   &quot;male&quot;,                &quot;DC&quot;,
+  &quot;Catwoman&quot;,      &quot;bad&quot;, &quot;female&quot;,                &quot;DC&quot;,
+   &quot;Hellboy&quot;,     &quot;good&quot;,   &quot;male&quot;, &quot;Dark Horse Comics&quot;
+  )
+
+   publisher_info &lt;- tibble::tribble(
+  ~publisher, ~yr_founded,
+        &quot;DC&quot;,       1934,
+    &quot;Marvel&quot;,       1939,
+     &quot;Image&quot;,       1992
+  )</code></pre>
+<ol style="list-style-type: lower-alpha">
+<li><p>Merge the two datasets, keeping all observations from the superheroes dataset.</p></li>
+<li><p>Merge the two datasets, keeping all observations from the <code>publisher_info</code> dataset. How does <code>join</code> handle duplicate keys in this case?</p></li>
+<li><p>Merge the two datasets, ensuring that no observations are dropped.</p></li>
+</ol></li>
+<li><p>In your own words, describe the difference between the <code>sep</code>and <code>collapse</code> arguments to <code>str_c</code>.</p></li>
+<li><p>What does <code>str_wrap()</code> do? When might you want to use it?</p></li>
+<li><p>How would you match the literal string <code>"$^$"</code>?</p></li>
+<li><p>Replace all forward slashes in the string below with backslashes:</p>
+<pre><code>past/present/future</code></pre></li>
+<li><p>Using the <code>flu_data.txt</code> dataset, calculate the proportion of <code>Strains</code> including the string <code>"H1N1"</code>, both with and without parentheses.</p></li>
+<li><p>Using the <code>flu_data.txt</code> dataset, clean the <code>Strains</code> column so that all “Victoria” strains are labeled with the exact same string.</p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
