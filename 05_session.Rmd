@@ -68,13 +68,13 @@ library(tidyverse)
 cyto_small <- read_csv("Cytokine-Results_small.csv", 
                        skip = 1)
 
-a_mean_function <- function(data, column){
+my_mean_center <- function(data, column){
   result <- data %>% 
-    summarise(mean = mean({{column}}))
+    transmute(mean_center = {{column}} - mean({{column}}))
   return(result)
 }
 
-a_mean_function(cyto_small, BLC)
+my_mean_center(cyto_small, BLC)
 ```
 
 To download the data used on the website, click the link below:
