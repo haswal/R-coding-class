@@ -21,27 +21,23 @@ cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1
 * Output data to a CSV
 * Manipulate strings in your data with `stringr` and regular expressions
 
-<!-- ## Script -->
 
-<!-- Both scripts from Session 05 are available for download below. -->
+## Script
+You can download the script from session 5 by clicking the link below. 
 
+```{r, include = FALSE, eval = FALSE}
 
-<!-- ```{r, include = TRUE, echo = FALSE} -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-
-<!-- ```{r include = TRUE, echo = FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/session_05_desiree.R", "scripts/Session_5_hasse.R"),  -->
-<!--                   text = paste("Download Session 5 scripts"),  -->
-<!--                   name = paste0("05_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('session_05.R')
+```
 
 
 ## Cheatsheets
