@@ -1,0 +1,173 @@
+---
+title: 'Session 6: Intro to R Markdown'
+date: "Apr 2, 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx", skip = 1, sheet = 2)
+
+
+
+```
+
+
+## Agenda
+
+* Introduce R Markdown to create a report that combines text, code, and output
+* Use markdown syntax to add headers, formatted text, images, and more
+* Create code chunks to embed R code in your report
+* Add interactivity with HTML widgets
+* Publish your single page report online with Netlify
+
+<!-- ## Script -->
+
+<!-- Here is the [link to the Intro to R Markdown slides](https://docs.google.com/presentation/d/1K7iSD1X-8geZS0WKIx1q8p4QbExMR2u5Fhs-ADod5DI/edit?usp=sharing). The file used for today's session will also be available below. -->
+
+
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/index.Rmd"),  -->
+<!--                   text = paste("Download Session 6 .Rmd file"),  -->
+<!--                   name = paste0("06_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+
+
+## Cheatsheets
+
+* [R Markdown cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+
+
+## Resources
+
+For this lesson, you'll need to install the following packages: 
+
+* `rmarkdown` (already comes built-in with RStudio, but it's good to re-install every once in a while to update it)
+* `tufte`
+* `distill`
+* `plotly`
+* `leaflet`
+
+
+You'll also need to create a free account with [netlify.com](https://www.netlify.com/), which is what we will use to put publish our R Markdown reports.
+
+***
+
+The R Markdown parts of the text are [Chapters 27 and 29](https://r4ds.had.co.nz/r-markdown.html). 
+
+If you *really* want to do a deep dive into R Markdown, then the official book all about it is [this one](https://bookdown.org/yihui/rmarkdown/), but I use this as more of a reference. 
+
+I recommend checking out https://rmarkdown.rstudio.com/index.html for an overview of all the things you can build with R Markdown, and then going back to the official book to get more information from there. 
+
+
+
+### Writing a thesis with R Markdown
+
+Many people use R Markdown for thesis-writing, most will output to PDF, which will make use of more LaTeX then what we covered in session 6. But there are *many* blog posts and R packages out there to make thesis writing in R Markdown easier. Here are just some of the more popular posts:
+
+#### Examples
+
+[Tyson Barrett](https://twitter.com/healthandstats) wrote his dissertation in R Markdown, using PDF output. His blog post also talks about how he convinced his PI (who didn't work with R) to let him do this.  
+
+  * https://tysonbarrett.com/jekyll/update/2018/02/11/r_dissertation/
+  
+  \
+  
+[Rosanna Van Hespen](https://twitter.com/rosannavhespen?lang=en) also wrote her thesis using PDF output and wrote a series of blogposts about it that walks you through her process:  
+
+  * https://www.rosannavanhespen.nl/thesis_in_rmarkdown/
+  
+  
+  \
+  
+  
+You could also look into using **Bookdown**, which is a type of R Markdown *website* that lets you put together collections of single .Rmd files together as a "book". Bookdown can create PDFs or HTML. Some blog posts from people who have used the PDF version are here:
+
+  * https://from-stata-to-r.netlify.app/posts/tips-and-tricks-r-markdown/
+  * https://www.barelysignificant.com/post/old/blogdown/
+  * https://www.eddjberry.com/post/writing-your-thesis-with-bookdown/
+  
+## Giraffe Homework
+There will be no giraffe homework this week, so you can focus on the R Markdown exercises below. 
+
+## Exercises
+
+We have several exercises for you to get more practice working with R Markdown. You should create a *new* R Project for these exercises that is separate from the R Project that you have been using for our workshop session R scripts.
+
+1. Create a new R Markdown document with File > New File > R Markdown… Knit it by clicking the appropriate button. Then try knitting by using the appropriate keyboard short cut. Verify that you can modify the input and see the output update.
+
+2. Using the R Markdown quick reference, figure out how to:
+
+    * Add a footnote.
+    * Add a horizontal rule.
+    * Add a block quote.
+    * Format the equation E = mc^2 as a LaTeX equation. 
+  
+3. Add an image to your document that spans 80% of the width of the page, then knit (Need an image to add? Grab one from http://www.rawpixel.com or http://www.unsplash.com). Can you *also* turn this image into a clickable link?
+
+4. In a code chunk, load the `tidyverse`. Modify the code chunk options so that when you knit, your document will not contain any output messages related to loading this package.
+
+5. In a single code chunk, add the code below to create a ggplot.
+
+    ```{r, eval = FALSE}
+cyto_data <- readxl::read_excel("Cytokine-Results_MULTIPL.615133.xlsx",
+                                skip = 1, 
+                                sheet = 2)
+    
+cyto_data %>%
+  ggplot(mapping = aes(x = TP,
+                       y = `IP-10`,
+                       color = Monkey)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+    
+    ```
+
+    * Run the code chunk by clicking the green play button. Do you see your plot? 
+    * Now make the plot interactive by using the `ggplotly()` function. 
+    
+
+6. Add the following code chunk option to the ggplot chunk you created in the previous exercise. Knit your document. What happened?
+
+    ```
+    fig.cap = "My awesome plotly plot"
+    ```
+    
+    Now change the YAML output of your R Markdown document from `html_document` to `distill::distill_article` and knit again. What do you notice about the figure caption?
+  
+7. A common way that data scientists share R Markdown files and collaborate is through Github, a website for housing collections of code. Let's test this for ourselves: copy and paste the contents of `diamond-sizes.Rmd` from https://github.com/hadley/r4ds/tree/master/rmarkdown in to a local R markdown document in your RStudio IDE. Check that you can run it.
+
+8. In a new R Markdown document, practice what you’ve learned by creating a brief CV. The title should be your name, and you should include headings for (at least) education or employment. Each of the sections should include a bulleted list of jobs/degrees. Highlight the year in bold.
+
+9. Create one new R Markdown document for each of the three built-in formats: HTML, PDF and Word. Knit each of the three documents. How does the output differ? How does the input differ? (You may need to install LaTeX in order to build the PDF output — RStudio will prompt you if this is necessary, or use this code: `tinytex::install_tinytex()` (after installing the `tinytex` package) to make sure everything you need for PDF output is installed).
+
+10. Let's explore a bit more about the Distill output. Do the following to create a new Distill article: 
+    * Go to File > New File > R Markdown...then select From Template > Distill Article. Knit your new document. 
+    
+    
+    <video controls style="width: 700px;">
+      <source src="new_distill.mp4" type="video/mp4">
+    </video>
+    
+    * Notice that the default YAML for the Distill article has some new keys. Update the YAML values with your own author and department info. If you do not want to use a particular YAML key, then delete it. Knit again.
+    
+    * Use markdown syntax to add at least two new headers to your Distill article document.  
+
+    * Using the [Distill documentation](https://rstudio.github.io/distill/), figure out how to: 
+        * Add an appendix.
+        * Create a sidebar note.
+        * Add a footnote.
+    
+11. Time to deploy an R Markdown document to Netlify. Use the drag n drop method to manually deploy any of the .Rmd files you have created. 

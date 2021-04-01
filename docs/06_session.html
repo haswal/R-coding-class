@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Session 6: Intro to R Markdown</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Marcus R Coding Class</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Getting Started</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Sessions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_session.html">Session 1</a>
+    </li>
+    <li>
+      <a href="02_session.html">Session 2</a>
+    </li>
+    <li>
+      <a href="03_session.html">Session 3</a>
+    </li>
+    <li>
+      <a href="04_session.html">Session 4</a>
+    </li>
+    <li>
+      <a href="05_session.html">Session 5</a>
+    </li>
+    <li>
+      <a href="06_session.html">Session 6</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Session 6: Intro to R Markdown</h1>
+<h4 class="date">Apr 2, 2021</h4>
+
+</div>
+
+
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
+<ul>
+<li>Introduce R Markdown to create a report that combines text, code, and output</li>
+<li>Use markdown syntax to add headers, formatted text, images, and more</li>
+<li>Create code chunks to embed R code in your report</li>
+<li>Add interactivity with HTML widgets</li>
+<li>Publish your single page report online with Netlify</li>
+</ul>
+<!-- ## Script -->
+<!-- Here is the [link to the Intro to R Markdown slides](https://docs.google.com/presentation/d/1K7iSD1X-8geZS0WKIx1q8p4QbExMR2u5Fhs-ADod5DI/edit?usp=sharing). The file used for today's session will also be available below. -->
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/index.Rmd"),  -->
+<!--                   text = paste("Download Session 6 .Rmd file"),  -->
+<!--                   name = paste0("06_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+</div>
+<div id="cheatsheets" class="section level2">
+<h2>Cheatsheets</h2>
+<ul>
+<li><a href="https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">R Markdown cheatsheet</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>For this lesson, you’ll need to install the following packages:</p>
+<ul>
+<li><code>rmarkdown</code> (already comes built-in with RStudio, but it’s good to re-install every once in a while to update it)</li>
+<li><code>tufte</code></li>
+<li><code>distill</code></li>
+<li><code>plotly</code></li>
+<li><code>leaflet</code></li>
+</ul>
+<p>You’ll also need to create a free account with <a href="https://www.netlify.com/">netlify.com</a>, which is what we will use to put publish our R Markdown reports.</p>
+<hr />
+<p>The R Markdown parts of the text are <a href="https://r4ds.had.co.nz/r-markdown.html">Chapters 27 and 29</a>.</p>
+<p>If you <em>really</em> want to do a deep dive into R Markdown, then the official book all about it is <a href="https://bookdown.org/yihui/rmarkdown/">this one</a>, but I use this as more of a reference.</p>
+<p>I recommend checking out <a href="https://rmarkdown.rstudio.com/index.html" class="uri">https://rmarkdown.rstudio.com/index.html</a> for an overview of all the things you can build with R Markdown, and then going back to the official book to get more information from there.</p>
+<div id="writing-a-thesis-with-r-markdown" class="section level3">
+<h3>Writing a thesis with R Markdown</h3>
+<p>Many people use R Markdown for thesis-writing, most will output to PDF, which will make use of more LaTeX then what we covered in session 6. But there are <em>many</em> blog posts and R packages out there to make thesis writing in R Markdown easier. Here are just some of the more popular posts:</p>
+<div id="examples" class="section level4">
+<h4>Examples</h4>
+<p><a href="https://twitter.com/healthandstats">Tyson Barrett</a> wrote his dissertation in R Markdown, using PDF output. His blog post also talks about how he convinced his PI (who didn’t work with R) to let him do this.</p>
+<ul>
+<li><a href="https://tysonbarrett.com/jekyll/update/2018/02/11/r_dissertation/" class="uri">https://tysonbarrett.com/jekyll/update/2018/02/11/r_dissertation/</a></li>
+</ul>
+<p><br />
+</p>
+<p><a href="https://twitter.com/rosannavhespen?lang=en">Rosanna Van Hespen</a> also wrote her thesis using PDF output and wrote a series of blogposts about it that walks you through her process:</p>
+<ul>
+<li><a href="https://www.rosannavanhespen.nl/thesis_in_rmarkdown/" class="uri">https://www.rosannavanhespen.nl/thesis_in_rmarkdown/</a></li>
+</ul>
+<p><br />
+</p>
+<p>You could also look into using <strong>Bookdown</strong>, which is a type of R Markdown <em>website</em> that lets you put together collections of single .Rmd files together as a “book”. Bookdown can create PDFs or HTML. Some blog posts from people who have used the PDF version are here:</p>
+<ul>
+<li><a href="https://from-stata-to-r.netlify.app/posts/tips-and-tricks-r-markdown/" class="uri">https://from-stata-to-r.netlify.app/posts/tips-and-tricks-r-markdown/</a></li>
+<li><a href="https://www.barelysignificant.com/post/old/blogdown/" class="uri">https://www.barelysignificant.com/post/old/blogdown/</a></li>
+<li><a href="https://www.eddjberry.com/post/writing-your-thesis-with-bookdown/" class="uri">https://www.eddjberry.com/post/writing-your-thesis-with-bookdown/</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="giraffe-homework" class="section level2">
+<h2>Giraffe Homework</h2>
+<p>There will be no giraffe homework this week, so you can focus on the R Markdown exercises below.</p>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<p>We have several exercises for you to get more practice working with R Markdown. You should create a <em>new</em> R Project for these exercises that is separate from the R Project that you have been using for our workshop session R scripts.</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new R Markdown document with File &gt; New File &gt; R Markdown… Knit it by clicking the appropriate button. Then try knitting by using the appropriate keyboard short cut. Verify that you can modify the input and see the output update.</p></li>
+<li><p>Using the R Markdown quick reference, figure out how to:</p>
+<ul>
+<li>Add a footnote.</li>
+<li>Add a horizontal rule.</li>
+<li>Add a block quote.</li>
+<li>Format the equation E = mc^2 as a LaTeX equation.</li>
+</ul></li>
+<li><p>Add an image to your document that spans 80% of the width of the page, then knit (Need an image to add? Grab one from <a href="http://www.rawpixel.com" class="uri">http://www.rawpixel.com</a> or <a href="http://www.unsplash.com" class="uri">http://www.unsplash.com</a>). Can you <em>also</em> turn this image into a clickable link?</p></li>
+<li><p>In a code chunk, load the <code>tidyverse</code>. Modify the code chunk options so that when you knit, your document will not contain any output messages related to loading this package.</p></li>
+<li><p>In a single code chunk, add the code below to create a ggplot.</p>
+<pre class="r"><code>cyto_data &lt;- readxl::read_excel(&quot;Cytokine-Results_MULTIPL.615133.xlsx&quot;,
+                            skip = 1, 
+                            sheet = 2)
+
+cyto_data %&gt;%
+  ggplot(mapping = aes(x = TP,
+                   y = `IP-10`,
+                   color = Monkey)) +
+  geom_point() +
+  geom_smooth(se = FALSE)</code></pre>
+<ul>
+<li>Run the code chunk by clicking the green play button. Do you see your plot?</li>
+<li>Now make the plot interactive by using the <code>ggplotly()</code> function.</li>
+</ul></li>
+<li><p>Add the following code chunk option to the ggplot chunk you created in the previous exercise. Knit your document. What happened?</p>
+<pre><code>fig.cap = &quot;My awesome plotly plot&quot;</code></pre>
+<p>Now change the YAML output of your R Markdown document from <code>html_document</code> to <code>distill::distill_article</code> and knit again. What do you notice about the figure caption?</p></li>
+<li><p>A common way that data scientists share R Markdown files and collaborate is through Github, a website for housing collections of code. Let’s test this for ourselves: copy and paste the contents of <code>diamond-sizes.Rmd</code> from <a href="https://github.com/hadley/r4ds/tree/master/rmarkdown" class="uri">https://github.com/hadley/r4ds/tree/master/rmarkdown</a> in to a local R markdown document in your RStudio IDE. Check that you can run it.</p></li>
+<li><p>In a new R Markdown document, practice what you’ve learned by creating a brief CV. The title should be your name, and you should include headings for (at least) education or employment. Each of the sections should include a bulleted list of jobs/degrees. Highlight the year in bold.</p></li>
+<li><p>Create one new R Markdown document for each of the three built-in formats: HTML, PDF and Word. Knit each of the three documents. How does the output differ? How does the input differ? (You may need to install LaTeX in order to build the PDF output — RStudio will prompt you if this is necessary, or use this code: <code>tinytex::install_tinytex()</code> (after installing the <code>tinytex</code> package) to make sure everything you need for PDF output is installed).</p></li>
+<li><p>Let’s explore a bit more about the Distill output. Do the following to create a new Distill article:</p>
+<ul>
+<li>Go to File &gt; New File &gt; R Markdown…then select From Template &gt; Distill Article. Knit your new document.</li>
+</ul>
+<video controls style="width: 700px;">
+<source src="new_distill.mp4" type="video/mp4">
+</video>
+<ul>
+<li><p>Notice that the default YAML for the Distill article has some new keys. Update the YAML values with your own author and department info. If you do not want to use a particular YAML key, then delete it. Knit again.</p></li>
+<li><p>Use markdown syntax to add at least two new headers to your Distill article document.</p></li>
+<li><p>Using the <a href="https://rstudio.github.io/distill/">Distill documentation</a>, figure out how to:</p>
+<ul>
+<li>Add an appendix.</li>
+<li>Create a sidebar note.</li>
+<li>Add a footnote.</li>
+</ul></li>
+</ul></li>
+<li><p>Time to deploy an R Markdown document to Netlify. Use the drag n drop method to manually deploy any of the .Rmd files you have created.</p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
