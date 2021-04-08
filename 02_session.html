@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Session 2: Continuing with ggplot2</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Marcus R Coding Class</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Getting Started</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Sessions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_session.html">Session 1</a>
+    </li>
+    <li>
+      <a href="02_session.html">Session 2</a>
+    </li>
+    <li>
+      <a href="03_session.html">Session 3</a>
+    </li>
+    <li>
+      <a href="04_session.html">Session 4</a>
+    </li>
+    <li>
+      <a href="05_session.html">Session 5</a>
+    </li>
+    <li>
+      <a href="06_session.html">Session 6</a>
+    </li>
+    <li>
+      <a href="07_session.html">Session 7</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Session 2: Continuing with <code>ggplot2</code></h1>
+<h4 class="date">Mar 5, 2021</h4>
+
+</div>
+
+
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
+<ul>
+<li>Style your ggplot with labels, themes, and colors</li>
+<li>Export your plot with <code>ggsave()</code></li>
+<li>Transform your data set from wide to long format using <code>pivot_longer()</code></li>
+<li>Split your plot into subplots, using <code>facet_grid()</code> or <code>facet_wrap()</code></li>
+<li>Customize your plot by layering geoms</li>
+</ul>
+<!-- COMMENT--
+* Show that mapping = aes can go in the main ggplot or the geom
+* Introduce the vocabulary of "mapping" a property to a variable-- and vice versa. 
+* Styling your ggplot: 
+  * Changing axes labels + Title
+  * Hiding legend
+  * Adding a pre-defined theme
+  * Changing colors without changing the theme
+* ggsave()
+
+* Using `pivot_longer` to switch from wide to longer format
+* Facet grid and facet wrap
+* Geometric objects (aka geoms)
+-->
+</div>
+<div id="script" class="section level2">
+<h2>Script</h2>
+<p>You can download the script from today’s session, by clicking the link below.</p>
+<a href="data:text/plain;base64,IyBTZXNzaW9uIDAyCiMgTWFyIDUsIDIwMjEKCiMgTG9hZCBwYWNrYWdlcyAtLS0tCmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeSh3ZXNhbmRlcnNvbikKbGlicmFyeShnZ3RoZW1lcykKCiMgUmVhZCBpbiB0aGUgZGF0YSAtLS0tCmN5dG9fZGF0YSA8LSByZWFkX2V4Y2VsKHBhdGggPSAiQ3l0b2tpbmUtUmVzdWx0c19NVUxUSVBMLjYxNTEzMy54bHN4IiwKICAgICAgICAgICAgICAgICAgICAgICAgc2hlZXQgPSAyLAogICAgICAgICAgICAgICAgICAgICAgICBza2lwID0gMSkgCgojIE1hcHBpbmcgaW4gZ2dwbG90KCkgLS0tLQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpIAoKIyBDdXN0b21pemluZyBnZ3Bsb3QgLS0tLQojIENoYW5nZSBvciBhZGQgbGFiZWxzIGZvciBheGVzLCB0aXRsZSwgYW5kIGxlZ2VuZApnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIGxhYnMoeCA9ICJUaW1lcG9pbnQiLCAKICAgICAgIHkgPSAiQ0Q0MCBsaWdhbmQiLCAKICAgICAgIHRpdGxlID0gIkNENDBMIGV4cHJlc3Npb24iLCAKICAgICAgIHN1YnRpdGxlID0gIlN1YnRpdGxlIGdvZXMgaGVyZSIsIAogICAgICAgdGFnID0gIkEiLCAKICAgICAgIGNvbG9yID0gIlJoZXN1cyBtYWNhcXVlIiwgCiAgICAgICBjYXB0aW9uID0gIk15IGNhcHRpb24gaGVyZSIgKQoKCiMgT3IgcmVtb3ZlIHRoZW0KZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsKICBsYWJzKHggPSAiVGltZXBvaW50IiwgCiAgICAgICB5ID0gTlVMTCwgCiAgICAgICB0aXRsZSA9ICJDRDQwTCBleHByZXNzaW9uIiwgCiAgICAgICBjb2xvciA9IE5VTEwsIAogICAgICAgY2FwdGlvbiA9ICJNeSBjYXB0aW9uIGhlcmUiICkKCiMgSGlkZSBsZWdlbmQKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsKICBsYWJzKHggPSAiVGltZXBvaW50IiwgCiAgICAgICB5ID0gTlVMTCwgCiAgICAgICB0aXRsZSA9ICJDRDQwTCBleHByZXNzaW9uIiwgCiAgICAgICBjb2xvciA9IE5VTEwsIAogICAgICAgY2FwdGlvbiA9ICJNeSBjYXB0aW9uIGhlcmUiICkgKwogIGd1aWRlcyhjb2xvciA9IEZBTFNFKQoKIyBBZGQgYSBidWlsdC1pbiAiY29tcGxldGUgdGhlbWUiCiMgaHR0cHM6Ly9nZ3Bsb3QyLnRpZHl2ZXJzZS5vcmcvcmVmZXJlbmNlL2dndGhlbWUuaHRtbApnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIHRoZW1lX2NsYXNzaWMoKQoKIyBDaGFuZ2UgY3VzdG9tIGNvbG9yIHBhbGV0dGVzCiMgUHJlZGVmaW5lZCBjb2xvciBuYW1lOiBodHRwOi8vc2FwZS5pbmYudXNpLmNoL3F1aWNrLXJlZmVyZW5jZS9nZ3Bsb3QyL2NvbG91cgojIE9yIGhleCBjb2xvciBjb2RlczogaHR0cHM6Ly9odG1sY29sb3Jjb2Rlcy5jb20vCgojIGRpc2NyZXRlIHZhcmlhYmxlcwpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgIGNvbG9yID0gTW9ua2V5KSkgKyAKICBnZW9tX3BvaW50KCkgKwogIHRoZW1lX2NsYXNzaWMoKSArCiAgc2NhbGVfY29sb3JfbWFudWFsKHZhbHVlcyA9IGMoImJsdWUiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAicGluayIsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJvcmNoaWQiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiIzAwMDAwMCIsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJncmF5IikpCgojIGNvbnRpbnVvdXMgdmFyaWFibGUKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IFJBTlRFUykpICsgCiAgZ2VvbV9wb2ludCgpICsKICB0aGVtZV9jbGFzc2ljKCkgKwogIHNjYWxlX2NvbG9yX2dyYWRpZW50KGxvdyA9ICJyZWQiLCAKICAgICAgICAgICAgICAgICAgICAgICBoaWdoID0gImJsdWUiKQoKIyBUaGlyZCBwYXJ0eSBwYWxldHRlcwojIGluc3RhbGwucGFja2FnZXMoIndlc2FuZGVyc29uIikKIyBsaWJyYXJ5KHdlc2FuZGVyc29uKSBhdCB0aGUgdG9wIG9mIHRoZSBzY3JpcHQKIyBUbyBzZWUgcGFsZXR0ZXM6IGh0dHBzOi8vZ2l0aHViLmNvbS9rYXJ0aGlrL3dlc2FuZGVyc29uCgojIGRpc2NyZXRlCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLCAKICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSArCiAgdGhlbWVfY2xhc3NpYygpICsKICBzY2FsZV9jb2xvcl9tYW51YWwodmFsdWVzID0gd2VzX3BhbGV0dGUoIkRhcmplZWxpbmcxIikpCgojIGNvbnRpbnVvdXMgKHNjYWxlX2NvbG9yX2dyYWRpZW50bikKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGEsIAogICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICB5ID0gQ0Q0MEwsIAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IFJBTlRFUykpICsgCiAgZ2VvbV9wb2ludCgpICsgCiAgdGhlbWVfY2xhc3NpYygpICsKICBzY2FsZV9jb2xvcl9ncmFkaWVudG4oY29sb3JzID0gd2VzX3BhbGV0dGUoIlppc3NvdTEiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZSA9ICJjb250aW51b3VzIikpCgojIE90aGVyIHdheXMgdG8gc2V0IHRoZW1lcyArIGNvbG9ycwojIGluc3RhbGwucGFja2FnZXMoImdndGhlbWVzIikKIyBodHRwczovL3l1dGFubmloaWxhdGlvbi5naXRodWIuaW8vYWxsWW91ckZpZ3VyZUFyZUJlbG9uZ1RvVXMvZ2d0aGVtZXMvCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLCAKICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSArIAogIHNjYWxlX2NvbG9yX2hjKCkKCiMgQSBnZ3RoZW1lcyB0aGVtZQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwKICAgICAgICAgICAgICAgICAgICAgeSA9IENENDBMLAogICAgICAgICAgICAgICAgICAgICBjb2xvciA9IE1vbmtleSkpICsgCiAgZ2VvbV9wb2ludCgpICsgCiAgdGhlbWVfZXhjZWxfbmV3KCkKCiMgU2F2ZSB5b3VyIGdncGxvdCBvdXRwdXQgLS0tLS0tLS0tLS0tLQojIEFzc2lnbiB0aGUgcGxvdCB0byBhbiBSIG9iamVjdApwIDwtIGdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgICAgICAgbWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDRDQwTCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgY29sb3IgPSBNb25rZXkpKSArIAogIGdlb21fcG9pbnQoKSAKCiMgQ2FuIHNhdmUgZGlyZWN0bHkgaW50byBSIHByb2plY3QgZm9sZGVyIG9yIHN1YmZvbGRlcgpnZ3NhdmUocCwgCiAgICAgICBmaWxlbmFtZSA9ICJwbG90MS5wbmciLCAKICAgICAgIHdpZHRoID0gNSwgCiAgICAgICBoZWlnaHQgPSAxKQoKI3Bpdm90X2xvbmdlcigpLS0tLQojVXNlIHBpdm90X2xvbmdlciB0byB0cmFuc2Zvcm0gZGF0YSBmcm9tIHdpZGUgdG8gbG9uZyBmb3JtYXQKCmN5dG9fZGF0YV9sb25nIDwtIHBpdm90X2xvbmdlcihjeXRvX2RhdGEsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29scyA9IDU6NDksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBuYW1lc190byA9ICJDeXRva2luZXMiLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlc190byA9ICJDb25jZW50cmF0aW9uIikKCiNGYWNldHMtLS0tCiNQbG90IGFsbCBjeXRva2luZXMgdXNpbmcgZmFjZXRfd3JhcAoKZ2dwbG90KGRhdGEgPSBjeXRvX2RhdGFfbG9uZykrCiAgZ2VvbV9zbW9vdGgobWFwcGluZyA9IGFlcyh4ID0gVFAsIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgeSA9IENvbmNlbnRyYXRpb24pKSsKICB0aGVtZV9taW5pbWFsKCkrCiAgZmFjZXRfd3JhcCh+Q3l0b2tpbmVzKQoKI0xldCBheGlzIHNjYWxlcyBiZSAiZnJlZSIgCmdncGxvdChkYXRhID0gY3l0b19kYXRhX2xvbmcpKwogIGdlb21fc21vb3RoKG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDb25jZW50cmF0aW9uKSkrCiAgdGhlbWVfbWluaW1hbCgpKwogIGZhY2V0X3dyYXAofkN5dG9raW5lcywgCiAgICAgICAgICAgICBzY2FsZXMgPSAiZnJlZSIpCgojRnJlZSBvbmx5IHktYXhpcwpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YV9sb25nKSsKICBnZW9tX3Ntb290aChtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB5ID0gQ29uY2VudHJhdGlvbikpKwogIHRoZW1lX21pbmltYWwoKSsKICBmYWNldF93cmFwKH5DeXRva2luZXMsIAogICAgICAgICAgICAgc2NhbGVzID0gImZyZWVfeSIpCgojZmFjZXRfZ3JpZCgpIGlzIGFub3RoZXIgd2F5IHRvIGNyZWF0ZSBmYWNldGVkIHBsb3RzCmdncGxvdChkYXRhID0gY3l0b19kYXRhX2xvbmcpKwogIGdlb21fc21vb3RoKG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHkgPSBDb25jZW50cmF0aW9uKSkrCiAgdGhlbWVfbWluaW1hbCgpKwogIGZhY2V0X2dyaWQoQ3l0b2tpbmVzfk1vbmtleSwgc2NhbGVzID0gImZyZWVfeSIpCgojTGF5ZXJpbmcgZ2VvbXMtLS0tCiNBZGRpbmcgbXVsdGlwbGUgZ2VvbXMgb2YgdGhlIHNhbWUgdHlwZQpnZ3Bsb3QoZGF0YSA9IGN5dG9fZGF0YSwgCiAgICAgICBtYXBwaW5nID0gYWVzKHggPSBUUCwgCiAgICAgICAgICAgICAgICAgICAgIHkgPSBgRkdGLTJgKSkrCiAgZ2VvbV9zbW9vdGgobWFwcGluZyA9IGFlcyhjb2xvciA9IE1vbmtleSksIHVwCiAgICAgICAgICAgICAgc2UgPSBGQUxTRSwKICAgICAgICAgICAgICBzaXplID0gMC41KSsKICBnZW9tX3Ntb290aCgpCgojQSBzaWxseSBleGFtcGxlIHNob3dpbmcgdGhhdCB5b3UgY2FuIGFkZCBNQU5ZIGdlb21zIG9mIHRoZSBzYW1lIHR5cGUKCmdncGxvdChkYXRhID0gY3l0b19kYXRhLCAKICAgICAgIG1hcHBpbmcgPSBhZXMoeCA9IFRQLCAKICAgICAgICAgICAgICAgICAgICAgeSA9IGBGR0YtMmApKSsKICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5MTAiLCBzaXplID0gMTcsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTIwIiwgc2l6ZSA9IDE1LCBzZSA9IEYpKwogIGdlb21fc21vb3RoKGNvbG9yID0gImdyZXkzMCIsIHNpemUgPSAxMywgc2UgPSBGKSsKICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5NDAiLCBzaXplID0gMTEsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTUwIiwgc2l6ZSA9IDksIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTYwIiwgc2l6ZSA9IDcsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTcwIiwgc2l6ZSA9IDUsIHNlID0gRikrCiAgZ2VvbV9zbW9vdGgoY29sb3IgPSAiZ3JleTgwIiwgc2l6ZSA9IDMsIHNlID0gRikrdXBkYXRlLmZvcm11bGEubG0KICBnZW9tX3Ntb290aChjb2xvciA9ICJncmV5OTAiLCBzaXplID0gMSwgc2UgPSBGKSsKICB0aGVtZV9jbGFzc2ljKCkrCiAgc2NhbGVfeV9jb250aW51b3VzKGV4cGFuZCA9IGMoMC4yLCAwLjIpKQo=" download="session_02.R">Download session_02.R</a>
+</div>
+<div id="cheatsheets" class="section level2">
+<h2>Cheatsheets</h2>
+<ul>
+<li><a href="https://rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf">ggplot2</a></li>
+</ul>
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<p>Most of what we cover today will be based off of Chapter 3 in the R4DS textbook: <a href="https://r4ds.had.co.nz/data-visualisation.html" class="uri">https://r4ds.had.co.nz/data-visualisation.html</a></p>
+<p>Here are third-party packages that you may find fun to test out on your own ggplots (some we mentioned during the session, others we did not):</p>
+<ul>
+<li><a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/"><code>ggthemes</code></a> for new themes + color palettes</li>
+<li><a href="https://github.com/karthik/wesanderson"><code>wesanderson</code></a> color palettes</li>
+<li><a href="https://www.datanovia.com/en/blog/the-a-z-of-rcolorbrewer-palette/"><code>RcolorBrewer</code></a> for palettes</li>
+<li><a href="https://github.com/johannesbjork/LaCroixColoR"><code>LaCroixColoR</code></a> color palettes
+<ul>
+<li>This package is on Github only for now (not CRAN), so it has to be installed with the code below before you can load and use it:</li>
+</ul>
+<pre class="r"><code>    install.packages(&quot;devtools&quot;)
+    devtools::install_github(&quot;johannesbjork/LaCroixColoR&quot;)</code></pre></li>
+</ul>
+</div>
+<div id="giraffe-homework" class="section level2">
+<h2>Giraffe Homework</h2>
+<p>There will be two sets of homework exercises this week; one part will be the exercises listed below, the other will be the materials in the <em>Intro to the Normal Distribution</em> module on the website <a href="https://tinystats.github.io/teacups-giraffes-and-statistics/02_bellCurve.html">Teacups, Giraffes, and Statistics</a>.</p>
+<p>Work through the module and finish the coding exercises presented in the interactive windows. You should however complete the coding aspects of the module in RStudio on your local machine instead of on the site, so that you can save what you do. To run the examples locally, you will need a data file containing the giraffe heights, found here:</p>
+<a href="data:text/csv;base64,SGVpZ2h0LExvY2F0aW9uCjcuMDM4ODY0ODEwMTYxMjcyLElzbGFuZCAjMQoxMy4xNTQzMzg5NDMxMTcyNTgsSXNsYW5kICMxCjguMDg2NTExMDQxODMxNDYzLElzbGFuZCAjMQo4LjE1OTk4OTUwNDg4MjcxOCxJc2xhbmQgIzEKNi4wMDQ3MTU4MDYxMzczMTQsSXNsYW5kICMxCjkuNDU1NDA3OTExNTAxNTQsSXNsYW5kICMxCjkuMzY5MzAyNTc3MDY0NDMxLElzbGFuZCAjMQo4Ljc0MzQ4OTUyNjk2NDkyNSxJc2xhbmQgIzEKOS43ODcwNzIyMzAyNTU4MTEsSXNsYW5kICMxCjEwLjg1NjAyOTYwNDQwNDcwOSxJc2xhbmQgIzEKOC40NDQ1NjA4MzU3MDUxMSxJc2xhbmQgIzEKNy40MTIyMzU0MDQ3NzI3NjUsSXNsYW5kICMxCjguNDQwODY2OTgzODgxMTQyLElzbGFuZCAjMQoxMC4wMjM5MDM1MTcxMzA1OTcsSXNsYW5kICMxCjkuNjk1MTY3NTI0MzU1NjY0LElzbGFuZCAjMQo4LjU5MzA3MTQ5MTA0MjcxNixJc2xhbmQgIzEKMTIuMzc3NzU4MzEyNTUxMzQsSXNsYW5kICMxCjEwLjY4MTAyNDU0MTY5ODM3NixJc2xhbmQgIzEKMTEuMDEzOTM2MzQ0NTE4MzMxLElzbGFuZCAjMQo5LjQxMzM4OTcwMTgzNzE3OSxJc2xhbmQgIzEKMTAuNDQ3MjgyODMwNzUyNTQ3LElzbGFuZCAjMQoxNC4wMTQ0MDI5MTM4OTA4NzMsSXNsYW5kICMxCjEyLjAyMzk1ODIzNjEzNDI5MSxJc2xhbmQgIzEKOS4zOTUwODE1MDk2NjM0NyxJc2xhbmQgIzEKNy45NDk1MTAzMjE5NzI2NzgsSXNsYW5kICMxCjkuNDY1MjMwMzQwMDExNDM2LElzbGFuZCAjMQo5LjYwMTc4ODY3Nzc3MDQ3NSxJc2xhbmQgIzEKMTAuMjYyMjQ1MTkwODQ4NzUsSXNsYW5kICMxCjEwLjI5MTU5OTc5MTA4NzQwMixJc2xhbmQgIzEKMTAuNzI0MTI5NDQyMjM0NDU4LElzbGFuZCAjMQoxMS4zNDc5NjIzMjc2MDA5NSxJc2xhbmQgIzEKMTQuMTQ0MDcxNTM2MzAxMTM3LElzbGFuZCAjMQo4LjkxNzk0MjcwMTg3NzA0OSxJc2xhbmQgIzEKNy44NTkwMTU2ODMzNzU3OTQ1LElzbGFuZCAjMQo5LjI1NTA4NjUzNTQ0MzQ1NSxJc2xhbmQgIzEKOS4wMjk3MTcyOTA0MjM0NDksSXNsYW5kICMxCjEwLjU0OTU2ODM1Njk1MTQxOCxJc2xhbmQgIzEKOS4wNDA5NzQ4NzY4MzU0LElzbGFuZCAjMQoxMS41OTYyMTA2NTIyNTA3NSxJc2xhbmQgIzEKNy45OTEwOTc1OTUyMjI1NjYsSXNsYW5kICMxCjEwLjIwOTk2ODQ2NjEzOTY3NixJc2xhbmQgIzEKNy42ODgwMTQyMTk2MTU3ODYsSXNsYW5kICMxCjExLjE1NjI2OTI1MzkxNTcxMixJc2xhbmQgIzEKNi44MDg3NDg2ODc2MTI5NTEsSXNsYW5kICMxCjkuMzgyOTkyNjg3NTg4MTcsSXNsYW5kICMxCjEwLjg5ODkzMTg0NDI0NTE5NyxJc2xhbmQgIzEKOC4wNDU4OTM0MzQ3NDEyNTYsSXNsYW5kICMxCjEwLjM3OTk5NTcxODczNDQ5LElzbGFuZCAjMQoxMS40NjI5MDY3MTQ2MDAzNTQsSXNsYW5kICMxCjkuMDE0ODAxNzc4NDkxNDEyLElzbGFuZCAjMQoxNy45NDg3NzgxMDUzOTEyMDYsSXNsYW5kICMyCjE3Ljg2NDc5NTMwODI3OTMyNixJc2xhbmQgIzIKMTguNTQ4MTkyNjk3MjcxNzE2LElzbGFuZCAjMgoyMC40MjQ0MDE4MTAxMjAxMjMsSXNsYW5kICMyCjE2LjczODkzMTkyNTA1NjMyOCxJc2xhbmQgIzIKMTguODgxNTgyNTI3MDc0MjI2LElzbGFuZCAjMgoxOC42NDcwOTk2OTI3NDE4NTgsSXNsYW5kICMyCjE2LjQyMjg3MjY0MzY1OTU2MyxJc2xhbmQgIzIKMTcuNjk5OTUzNTMzNTMwNTUsSXNsYW5kICMyCjE4LjM3NzA0NTUxNTcyNDE5NSxJc2xhbmQgIzIKMTguNDg3ODU2MDMyNDEzOTI2LElzbGFuZCAjMgoxOS4xOTMzMDQ3MTk3NDg2MjgsSXNsYW5kICMyCjE5LjAyNjkyMjExODEwOTMyLElzbGFuZCAjMgoxOC4yMzY1NTQ3MDAyMjMwMjQsSXNsYW5kICMyCjE5LjAwMTE5MDA0NTA1NDAxNyxJc2xhbmQgIzIKMTkuMDE2MTQ4MTgyODg5Mjg1LElzbGFuZCAjMgoyMC4zNDQ5MjYzMDU1MjkyNSxJc2xhbmQgIzIKMTUuNDIwODg3OTk4MTE5NTU0LElzbGFuZCAjMgoxOS4xNjUzNDQzMjM2NTIwMjUsSXNsYW5kICMyCjE5LjM3NDA3Mzg4Nzk1MTAzOCxJc2xhbmQgIzIKMTcuMzY5NTE5MjQ4NjgxNTI0LElzbGFuZCAjMgoxOC4zMDAzODQxMjMzMjkwMDcsSXNsYW5kICMyCjE3LjQ4NDcxMjA2NjM1NjM1NSxJc2xhbmQgIzIKMTcuNzgwOTc2NDUzNDIzNjQsSXNsYW5kICMyCjE3Ljg3NjAyNzQ0MDMzODM4MyxJc2xhbmQgIzIKMTcuMjM5Mzk0MTU2MTQ1NzkyLElzbGFuZCAjMgoxNi40NzQ3MzU0NTUzNTYwNyxJc2xhbmQgIzIKMTcuNTM5MjU5NTI3MzE2MTEsSXNsYW5kICMyCjE4LjYyMDEwNjk2MjgzNTgyLElzbGFuZCAjMgoxNy43ODY0Mzc3NDc0MjY1NSxJc2xhbmQgIzIKMTguMDA1MTA5NjQ2Mzk1OTMzLElzbGFuZCAjMgoxNi40NzExMjg1Mzg5NzU3MDUsSXNsYW5kICMyCjE3Ljc1NzQ2NzU5NDAxMDQzNixJc2xhbmQgIzIKMTkuMzk3MzU5MDU1Njg5MzkyLElzbGFuZCAjMgoxNy45NzE5NDQ3MDk3NzEzNTMsSXNsYW5kICMyCjE5LjA3NjU4ODA5OTg4MDk0NyxJc2xhbmQgIzIKMTcuNzg3OTMwNjU0MDgyMDkzLElzbGFuZCAjMgoxOS4zMzY0NTA4OTMwNjk5MyxJc2xhbmQgIzIKMTcuMzQ5NzMzMzY4NDIwMDU0LElzbGFuZCAjMgoxNi44NDM5MjIwMDE3NDI0OCxJc2xhbmQgIzIKMTguNDUxNzM4MDc5NDk4MzYsSXNsYW5kICMyCjE2LjgxODM5MTQ0Mzk0MzgyNCxJc2xhbmQgIzIKMTkuMDc3MDcxMjgyNzI4MjA1LElzbGFuZCAjMgoxOC4xNTUxMTUwNDAxODI0NCxJc2xhbmQgIzIKMTkuMjQwNDQzNTc2Njc2OTI0LElzbGFuZCAjMgoxNy41ODkyNTI4NzE2NDY3NyxJc2xhbmQgIzIKMTguNTQyNzM3NTA3ODQyODE2LElzbGFuZCAjMgoxNy4xNjYzMTQ0Njk1Njc2NCxJc2xhbmQgIzIKMTcuNzEzMTgzNjkwNzM2NTQzLElzbGFuZCAjMgoxNi43OTEyNDEyNDg0OTE2ODcsSXNsYW5kICMyCg==" download="Giraffe_heights.csv">Download Giraffe_heights.csv</a>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<p>The rest of the exercises for this week are below. I suggest that you create a new R script to work through the answers. You should save your Exercises script in your RStudio Project for this workshop.</p>
+<p>You’ll first need to read in the data the way that we showed during Session 1, and call it <code>cyto_data</code>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Run <code>ggplot(data = cyto_data, mapping = aes(x = TP, y = CD40L))</code>. What do you see? (Make sure you have loaded all the packages that you need!)</p></li>
+<li><p>Make a scatterplot of time (<code>TP</code>) vs the cytokine <code>FGF-2</code>.</p></li>
+<li><p>Recreate the R code necessary to generate the following graph:</p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-6-1.png" width="100%" /></p></li>
+<li><p>Building on the scatterplot you made in #2, make the data points vary in size based on the values of the variable <code>RANTES</code> (i.e., <em>map</em> the aesthetic property <code>size</code> to the variable <code>RANTES</code>). Then, one at a time, map <code>color</code> and <code>shape</code> to <code>RANTES</code>. Finally, map <code>size</code>, <code>color</code>, and <code>shape</code> to the variable for monkey ID. How do these aesthetics behavior differently for continuous vs. categorical variables?</p></li>
+<li><p>What’s gone wrong with this code? Why are the points not blue?</p>
+<pre class="r"><code>ggplot(data = cyto_data, mapping = aes(x = TP, y = `FGF-2`, color = &quot;blue&quot; )) + 
+  geom_point()</code></pre>
+<p><img src="02_session_files/figure-html/unnamed-chunk-7-1.png" width="100%" /></p></li>
+<li><p>What happens if you map multiple aesthetics to the same variable?</p></li>
+<li><p>What happens if you map an aesthetic to something other than a variable name, like <code>aes(color = TP &lt; 4)</code>? Note, you’ll also need to specify x and y.</p></li>
+<li><p>Fix the code below to make it run:</p>
+<pre class="r"><code>ggplot(data = cyto_data) 
++ geom_point(mapping = aes(x = MIG, y = BLC)</code></pre></li>
+<li><p>Do your best to recreate the plot below.</p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-9-1.png" width="100%" /></p>
+<ul>
+<li><p>Now, can you use the <code>FantasticFox1</code> palette from the <code>wesanderson</code> package to create the plot below?</p>
+<p><img src="02_session_files/figure-html/unnamed-chunk-10-1.png" width="100%" /></p></li>
+</ul></li>
+<li><p>Save the ggplot from the last exercise as a square plot under the filename <code>plot1.jpg</code> inside of your RStudio project.</p></li>
+<li><p>What plots does the following code make? What does <code>.</code> do?</p>
+<pre class="r"><code>ggplot(data = cyto_data) + 
+  geom_point(mapping = aes(x = TP, y = `FGF-2`)) +
+  facet_grid(Monkey ~ .)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = TP, y = `FGF-2`)) +
+  facet_grid(. ~ Monkey)</code></pre></li>
+<li><p>Read <code>?facet_wrap</code>. What does <code>nrow</code> do? What does <code>ncol</code> do? Why doesn’t <code>facet_grid()</code> have <code>nrow</code> and <code>ncol</code> arguments?</p></li>
+<li><p>Recreate the R code necessary to generate the following graphs.</p>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-12-1.png" width="100%" /></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-13-1.png" width="100%" /></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-14-1.png" width="100%" /></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-15-1.png" width="100%" /></p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-16-1.png" width="100%" /></p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><img src="02_session_files/figure-html/unnamed-chunk-17-1.png" width="100%" /></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

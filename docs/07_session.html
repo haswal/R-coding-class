@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Session 7: Statistics in R</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Marcus R Coding Class</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Getting Started</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Sessions
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_session.html">Session 1</a>
+    </li>
+    <li>
+      <a href="02_session.html">Session 2</a>
+    </li>
+    <li>
+      <a href="03_session.html">Session 3</a>
+    </li>
+    <li>
+      <a href="04_session.html">Session 4</a>
+    </li>
+    <li>
+      <a href="05_session.html">Session 5</a>
+    </li>
+    <li>
+      <a href="06_session.html">Session 6</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Session 7: Statistics in R</h1>
+<h4 class="date">Apr 9, 2021</h4>
+
+</div>
+
+
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
+<ul>
+<li>ANOVA</li>
+<li>t-tests</li>
+<li>Correlation</li>
+<li>Linear models</li>
+<li>Styling output from statistical models</li>
+</ul>
+<!-- ## Script -->
+<!-- The R markdown file for session 7 is available below. These include the R Markdown file and an additional CSV file that was used for a demonstration plot.  -->
+<!-- ```{r, include = TRUE, echo = FALSE} -->
+<!-- # install and load these packages -->
+<!-- # devtools::install_github('yihui/xfun') -->
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+<!-- ```{r include = TRUE, echo = FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_files(c("scripts/Stats_Report.Rmd", "scripts/auto_corr_data.csv"),  -->
+<!--                   text = paste("Download Session 7 files"),  -->
+<!--                   name = paste0("07_session", ".zip") -->
+<!--                   ) -->
+<!-- ``` -->
+</div>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<div id="for-modeling" class="section level3">
+<h3>For modeling</h3>
+<p>t-test: <a href="https://www.scribbr.com/statistics/t-test/" class="uri">https://www.scribbr.com/statistics/t-test/</a></p>
+<p>ANOVA: <a href="https://www.scribbr.com/statistics/anova-in-r/" class="uri">https://www.scribbr.com/statistics/anova-in-r/</a></p>
+<p>Linear regression: <a href="https://www.scribbr.com/statistics/linear-regression-in-r/" class="uri">https://www.scribbr.com/statistics/linear-regression-in-r/</a></p>
+</div>
+<div id="for-styling" class="section level3">
+<h3>For styling</h3>
+<p>kableExtra: <a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html" class="uri">https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html</a></p>
+<p>DT: <a href="https://rstudio.github.io/DT/" class="uri">https://rstudio.github.io/DT/</a></p>
+</div>
+<div id="for-fun" class="section level3">
+<h3>For fun:</h3>
+<p>Correlation: <a href="https://tinystats.github.io/teacups-giraffes-and-statistics/05_correlation.html" class="uri">https://tinystats.github.io/teacups-giraffes-and-statistics/05_correlation.html</a></p>
+</div>
+</div>
+<div id="exercises" class="section level2">
+<h2>Exercises</h2>
+<p>As a research fellow at the Marcus Autism center, you have been asked to summarize information from a pilot study investigating how the expression of two different genes (SHANK3 and MECP2) differs across diagnosis groups, sex and tissue type. The gene expression data was generated by a sequencing core at Emory University, and information about the subjects was collected at the Marcus center. Consequently, the information about expression and subjects is stored in two seperate csv files, which you can download below.</p>
+<p><a href="data:application/zip;base64,UEsDBBQAAgAIAPyGh1L/iPa3PQ4AAIAcAAAYAAAAZ2VuZV9leHByZXNzaW9uX2RhdGEuY3N2PZnLrmxHVkX7/pajo3g/mggwIGSEBD9gVG5YsqiGRX1/jTEjL7pyVp6dsSPWY6655or679///PP/fvv6l9/+97evf/unX5YftfD5c235PvN5fNLyvLV8znyufG7XtOtnz5re85k1PWv6ya9ZM7JmZP+RlWPk+873rBxZOfPrHPmMJTMWzpw4Y9V05c8ru62sX1m58nznrF19svN8592T5yfPT946+fXE2hNLTna4rvzl1nzP6Tc75EFi8VyILTks+2R51uWM2vMZP+uLcs6oOaNlTctGLTu1bNBzSH+n5N3+YpTnIxaPWDzjz8w+M+tX7F55svLuyrkr9q1EeWfljm075+7stt+vsf8ksie/njy/eevG2pudbyy579f70//88de//uXrl3/+x/9sX/N73zJLrfvUckjN/D7lzFb67rst/FnfdY1V1771tk565veao9SxTm2XL76y56299NrXJMmsOKXOuuu4vsoes+26Rx2T38vgwaqjl7o4otblHm2vMYaL5hi+svq8a7W7Wis7p9xdy27nXk5nwe29nnE4S0u/9jeGl8lfa2PL5gHn1bnKKns0IIIrs91Z7m3jdFDNiln7XWdz8iKs+rZKvdi0+rrGp8y2Lr5MbAcI57uUQyTOPqcQgq+BHfXMW3hpTkC/vkevu3HEnoUC+vnX3//47S8eXohhdSf9cqe77p4b73ZtsWbcO3CzjT6qLleyUDl+3nmwhjh2HOEYlpwyeUCcdx9tjVvO0cVC7rClLHynrPv3bWvVedjpEIi8cslC63MQLwM59jq9s4qTqcL9TWZrabePKxJ0cXazw07tNPeYhmlNzD5kHl/6mOSL5JDWayBvEU+nldvX0fRxGycfrC8NNsKOUzt79NXHvpdX2L93nMG7Nnsybi7WIHJsYso5kTWj9FUDxUs4z+gT30hZfCE1fR6c3914bP5aV0iXMmqQtw7AHr0fTDbl2L73xtIGnnCf/XoDsYu48IA0aBLxIVWLGhnfbLhaxZG75nYFaNqEtY0JGI3YGeSg1E2FkBx96aPfzUmUCRQ1vue9Box47blE67pDXB48aN3sY1MnQ0QYuy6vlN5GEeVjDbNAYVob+x5iX8n1akDlFPagANtX+6as79nAcKwytZzIcOYoeMA3H3QKigy1e/tNmREHKmuvCziXrhB0DcVjspdyZ3tys0vhXOEBkkAU2SYb5mlfgk7N4WuFHwEhlo9ySQalZuIoxJzJ8VQ8e0AQnEx8yEXQQMDlJEw/vbYkHzP7HZv6Ka4goRtoU01ERcPM4eiHrAySqun3HuvwAA4zuzhknl4AJkEwkUN0LXFXIfv9TWxZPTfhquWlmgzAXAPb703eiCWAPKfNnIqHS3iBZupUV0ZPWuaEJTfeUybUEQUJEYXKNsVDgWg9RYFvDQrA9iKrEnQAxV5Uf+MFcuGmZGyTXo7SMHJdawNUBJVqWTFssrg0SFemSl1DCksWhuQMqQVL7YwGp87wIVlYMgR5SGpvS2mTm02MP9xFjUAyUAqh3XCpBm/cO5zYgHgYgXdg78XfeBuwsmst1vZMqcJKBAWWIhjt04X+61//4T/+vX/V/s35A+I0p5QHD3TUPFGIlGlt38dCX1AUlP1VMWFY2tIDqfANGokHwg148VVz5CUiZBjIugIosQHMTfku94CKKuCVXtAWlTCf2wEIob5u2r6plE4dEIBJ6lhR6ARl8B/JHZ4y6QOWlal6m9IzrpABrssVg+qgxghgb9kDvtrEEqBseJ4VlF4FE5AGxeoKQomx1CpkWo0/QKY5QFx0S85YmgiG7V+x0/2xYlpC5+M83XNPbEAwfTLJzvASdUwpQW/uBNNLwViTmEj2Uqg0Ts0mrqTWHgnAEudN1MAWiSXzGi8R1iuflhb38AZy25LCV63fe2IkQSfvLbax42uy9ObPmXSjkU5Ka8QqduIYOsS+WQCz0fps5g11gBENsG8KJsLCFeNacHpTNUsKJgKwJ/RhEIdVRy1YusT2RV2GYpMy7/OEsu9wEs3149qlo7ErwKI+PAVGgqZh9kWrxA4A1prsBiJufEMdwWxsQ4R8UPi6SQWs1Z9vYgcao6vAlu4Bd1gtSI4ZSJHc6eu4Jgolw0m4QWE6I6/gPdyCSiBkyT8Ig/kshSNO67fiYlWiCHv3IETAsjMYhOr0RdKyq7NPgIxLkKGNsuy3YCaa9CwxVUE2om0g82jm2QJy5NGwq3uqh/AXBQbyYBhfodMOaMIguoD/hTebxPUBl+Fiz1JuwANHywIw8+05A6ypmuijyEy3gMQ53lZwEguYmQK0p+8dRxoAxJnaZ9AEuRRJm5JsL4uqN+TcqPTvRI8mwgbSLel+e4Ju7Fb0pmTRBOAIdgEL7eWZiuAQJMqDFyWPaEQmbvuVhEWwi/1FKREeGPZm1FWjLyeLShVWkcUe5xvBUdwhfoMMej/M7EEtGQEkJFVe7XGEjQgV8YFLsuOGk6kT1cdO1pfdAHdV03GEYKPVoNGecPIKkYM5iEnvj0cVeQokPEytLa0G8jSfF4yN4O3KirZbjqUlE/udPhfkgAAcgdIpIBeA8DDzrjNpN59oNfX9Sqyuwg3FekGYD5A+8Lliu7+6mkq67dQwE0zEPf1P4dX3g7ODAXisZ32ANmmMMD1kmw2UDYeMo13WT3/++sfvf/v1/8eg9G4CYg7njBhFfpFM2AFCUH5UR5OGhcjCyA9iBghJSVn96SKAyR80HXBj1xwKWLiTykwPpKKn0cfmhpUofsq3qghXTwM+37Cu6rOQsKE4p+lRf6giCjwDSpWb1FcA0sZL8uCVu6FQx4otMzZhoGDvqp6GwEElb/vrsnkTOit5Cok+I60QFWBCRRZdzXLEDb4qy+zmDkT8x8y1NJRNlRq0ENiN3phZpamjrVSEixIhVMwzqXDlWJWIDHSoVVfIasW5qRsMJj27AEIoowvRufQLdE81sZoFpVv1DIjoaIUmv+IU6hJUv6GCGee1Z4e+KBpKA5WlksgsQ5vtKHGMl6W0ggISJdQ+zOgDElDNKjHd2qFgIB3gCLGk1CK/8gP2SvRaSlJIIt5gMuNQpVERf/PM3BAtRvRp2qqJE99ILJsNxggUW8ZDq9aWQMkrNKEWmgKV58TjCoQHWJQQ3CWpxyZXdGMUVyhk0DGcsjIOIZokV6eqFZkGzzrb0hhuFN+WqKV4dZUAm8ruqUDI8Gemke4KZ9rpdAVtmTYRh06GClSKM4xh2ieJpRCsNeddXoEbKe6V0Y92EtEs2yIarsOrAAOxrapZ7MEn07xaj3xWy1DkS2uIKGawlTkE6k0XBVI46DxEQVrxEEuJ8KYzgAP4r5iIL3lqL2HvONQ13d5CliEZNEmGeXnNuYMuFh6IgkZ2OfE57msOAUdals89BDBARNrnZBqHiq0sRhQwIbWMQ0veoX0L968nkAgufQI4WzwWCXUup6ndTb6jHi/QKUgknYAOATkpRjJiOX04iDGJ7vXspAIPbgIQzYIwijWc2XZFwxMEBx2WPNASORoQ5E4T1nmgRHZiPWOFFdlV7GokuVE7bUZwA4GvmYSxGq2r1qOPe4rgmQzn4Js0sEKLGpQ1fdNhCCkHW/GvvTHuVhI/vMiB9zLFIbZYWyJ3neKgYKTNakp5KwOUkTKkkWhwjLOdkXgkNeSUFcUEwzN8keCoHIUNrRjB7yHA/cJ9MT70Tva6XA2kCbJgMmPeHijbzw8BzVmZxqejhIXrlVHUrNc2EEf4A3XsJZSaZ+CyFyHIGygHqITEbTILqiPNZf/oRT+GoagoioeCa06Uql0QulVF6v60ZJyjzK+t534mBDICMUo76eJTQqN0e30zhqIHpQsh1JYWa4zp8l2JMhSm8M7y8mU78qSlUqZIZBmlv65sYnUFMH50kg0Nyl7ee0QFKXoII/SQTdGwcBYjUfFCzT4MpCBltHw5n2mIAqYyt5d9ae23egtp6faof2+j7APs/cYBLBypFiqrP+foiOrw46RvxLx+2ih/CiubSvdMqIjRqDXvQJQc22knmtsBjX+gYGR6dJSVKI8CNK7ZJuFSheFz/njBuehR5TnvzYt92rn7vvlBdmLSaU+/wQjUcZkWrurYJjDNovzteiXnULjMGkGIlqTAN2CMZJTzq/dTXorMN/dU/oDPrKh4fpwbyAadeuXQ7kWBDS53C+rQ6m1ds4e9lHTv+uA7L2iCFZRDU7q2N5HIaUNdep1rT4bc6W3VssPfiETHLNFnDPKKo0Iu/zZdLmllM+J/wh8vi8sLXZQ+dRto9KLqdEb4sSlnePPgNWly0GyJeOfN8bOU4eA+tZ5X6GKkA8VDe4mcnanzeeGlERBDJ7Ru3udfyq15gwhNIYeeRl5OjgVYlv0EL9Ms7cz6PS2VYQIgczzZJXvgiFMbYPpIYMqR96uUu54EnrK1d+ao5ozF6SDdazLHq0YatncYDLU1b8zcQ6wt+s8bQpy1ZJP6tDtVxUg3vax+Uh34wQi0NJKQFZCwWABE9V2K4MTwYhUcvfiwN/3g2Jo/zjarDT251yMb7AOXk7bRSx7QNPXettA+QwV9nkyy0efCYti/rzd4M3m6ar7uQLvfpMLE5o0fyCzlcyykAHyaE05WLKnYm5nxJnqv0GAEEFAeL2ztpsXTgAJsGIXSpHaKWubdKxAYLwwh8VccUKLzTa2fYZL4O3/SBu8rUa+9nToo/f7h3uPtOMVuOBipZBG0rePz/TG1UXTeq9aHY3oofZBIt5d7BYhXfTj3mb2nV2zVS40RM/x/N7xw3uFzqMTrrevF/7hvynWQj5xr/WMG7ZqSVUA/lhRe3ona0UOs4GB4Gc5Bb1yk7UwBBR3nWG/19lRYZtSbD2EmETy3n/4OUEsDBBQAAgAIAPyGh1IhdT2fGwIAACAJAAANAAAAbWV0YV9kYXRhLmNzdnVWy27iQBC851tGyPPoeRyJIBHS7om9I7KxkCOyrDCJNn+/xsb9ID3Xcqe6q6umSf/x8tb+vmxW5rXbH/6c+q43ffvP7A/tw3az2tmmsebXyvxc/libuIAZdFfwqX3fH1sDizTDnsFxkWc4CNjPMAiSMMPRLLdDx6kYOybBgcV5nO4OLKI2opKGM2O1tcgBNLN1Zrnbmqf1TTp98FgeFg7RwEioI4wdX05fAo1saNyGTYQilmlioF1YKbCgK5PA5+58HMoJtrpbzo3l+AElOs/E4J6ctNEiPok8XLsyPS5ydrZvl2ptc2XOwnzDqAkzCbZ61vyY2MO0Gcqrl6NQudSKNnuQf4CW+Jva9f1L8YntkhpnyYNe+cIdx/rQcBjVBquPGYSzVO4ZC4JBjkI9QX9yIbIHQNxJ484yA5iZwC2luaHREwAywXRBHHtJ2BW8Gg0IldwBVKaEqAQPkvomYZD6cen69+kLjV4qXSPXiuxxUPr1d7dqP7/dqegq2YtevWuRnyQMWBRiE+0+8qtE8yhXKWa1suh3u6kkPdnKYtJo6uN4M4nGX/eimZSCloEEfBpqGkWQcPiU1DymrF+TNB7g6awjd9YvUraVdGWn/WRk/kYZOTcTVWao7DBHzkLwKLPrT+fX9vwte7miNpeKhaWRWUJpxfL2SFRUxcULT3DYEir4cJd2t39JOM3d7w11TepGS9Y2Wop4NP8BUEsBAh4DFAACAAgA/IaHUv+I9rc9DgAAgBwAABgAAAAAAAAAAQAAAKSBAAAAAGdlbmVfZXhwcmVzc2lvbl9kYXRhLmNzdlBLAQIeAxQAAgAIAPyGh1IhdT2fGwIAACAJAAANAAAAAAAAAAEAAACkgXMOAABtZXRhX2RhdGEuY3N2UEsFBgAAAAACAAIAgQAAALkQAAAAAA==" download="data_files.zip">Download data files</a> <br></p>
+<p>Use your brand new R skills to create a R markdown report (in html format), showing all the steps necessary to generate plots, summaries, and statistics relevant for this pilot study.</p>
+<p>Here are some pointers regarding things you will need to do:</p>
+<ul>
+<li><p>Read in both data files, making sure you are using the correct <code>NA</code> string when doing so.</p></li>
+<li><p>Tidy the data and create a key that is identical in both sets, so that you can join them.</p></li>
+<li><p>Before joining, check for inconsistencies in terms of how groups are labeled in the different variables (Gene, tissue, sex, diagnosis), and fix issues if necessary (think <code>str_replace()</code>).</p></li>
+<li><p>Join data.</p></li>
+<li><p>Use ggplot to create a visualization to identify expression outliers, and remove outlier observations if you can find any.</p></li>
+<li><p>Use the <code>datatable</code> function from the <code>DT</code> package to show all of the data you are going to work with for subsequent analyses. Remove duplicated columns if you have any before generating the table.</p></li>
+<li><p>Investigate how similar gene expression is across blood and saliva (using t-test and correlation). We are interested in if expression in the different tissues are more or less the same for the Gene and diagnosis groups. If you determine that the expression is similar, average the expression across tissue types. If you think the expression is substantially different, continue by analyzing the tissues separately.</p></li>
+<li><p>Create a table showing the mean and standard deviation of the gene expression across relevant groups.</p></li>
+<li><p>Using an interaction effect ANOVA model, test if there are group differences in expression between ASD and TD subjects, and if the diagnosis effect is the same for males and females. Do this for the two genes separately.</p></li>
+<li><p>Use ggplot to create a visualization showing the most important findings from your statistical analysis.</p></li>
+<li><p>Style your final report to make it look nicer, in order to impress the PIs on this project.</p></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
