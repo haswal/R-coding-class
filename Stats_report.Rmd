@@ -1,0 +1,205 @@
+---
+title: "Stats Report R coding class"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: lumen
+---
+
+<style type="text/css">
+
+h1.title {
+  text-align: center;
+}
+
+</style>
+
+<br>
+<br>
+
+## Introduction
+
+Cytokines are a broad and loose category of small proteins (~5–20 kDa) important in cell signaling. Cytokines are peptides and cannot cross the lipid bilayer of cells to enter the cytoplasm. Cytokines have been shown to be involved in autocrine, paracrine and endocrine signaling as immunomodulating agents. Their definite distinction from hormones is still part of ongoing research.
+
+Cytokines include chemokines, interferons, interleukins, lymphokines, and tumour necrosis factors, but generally not hormones or growth factors (despite some overlap in the terminology). Cytokines are produced by a broad range of cells, including immune cells like macrophages, B lymphocytes, T lymphocytes and mast cells, as well as endothelial cells, fibroblasts, and various stromal cells; a given cytokine may be produced by more than one type of cell. They act through cell surface receptors and are especially important in the immune system; cytokines modulate the balance between humoral and cell-based immune responses, and they regulate the maturation, growth, and responsiveness of particular cell populations. Some cytokines enhance or inhibit the action of other cytokines in complex ways. They are different from hormones, which are also important cell signaling molecules. Hormones circulate in higher concentrations, and tend to be made by specific kinds of cells. Cytokines are important in health and disease, specifically in host immune responses to infection, inflammation, trauma, sepsis, cancer, and reproduction.
+<br>
+<br>
+<br>
+<center>
+![](https://miro.medium.com/max/1300/1*pjo9d0CeulYv8tGWZrmU-w.jpeg){width=60%}
+</center>
+<br>
+<br>
+
+## Loading packages
+```{r setup, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(DT)
+library(nlme)
+library(kableExtra)
+library(broom)
+```
+
+<br>
+
+## Reading in data
+```{r, message=FALSE}
+IL_data <- read_csv("example_data.csv")
+```
+
+<br>
+
+## Showing full data set 
+
+```{r}
+IL_data %>% 
+  datatable(options = list(pageLength = 5),
+            rownames = FALSE) %>% 
+  formatRound("Concentration", 2)
+```
+
+<br>
+
+## Plotting all data
+
+```{r, fig.width = 10, fig.height = 4}
+ggplot(data = IL_data, 
+       aes(x = TP, 
+           y = Concentration, 
+           color = Treatment))+
+  geom_boxplot()+
+  facet_wrap(~Cytokine, 
+             scales = "free_y")
+
+```
+
+<br>
+
+## Subsetting data (IL-6)
+```{r}
+IL6_data <- IL_data %>% 
+  filter(Cytokine == "IL-6")
+```
+
+<br>
+
+## Running interaction effect ANOVA
+```{r}
+IL6_data %>% 
+  aov(Concentration~TP*Treatment,
+      data = .) %>% 
+  summary()
+```
+
+<br>
+
+## ANOVA with nicer output
+```{r}
+IL6_data %>% 
+  aov(Concentration~TP*Treatment, 
+      data = .) %>% 
+      broom::tidy() %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                full_width = FALSE)
+```
+
+<br>
+
+## Repeated measures ANOVA 
+```{r}
+IL6_data %>% 
+  lme(Concentration~TP*Treatment, 
+           random = ~1|Monkey, 
+           data = .,
+           na.action = na.omit) %>% 
+  anova() %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                full_width = FALSE)
+```
+
+<br>
+
+## kable theme & "float" 
+```{r}
+IL6_data %>% 
+  lme(Concentration~TP*Treatment, 
+           random = ~1|Monkey, 
+           data = .,
+           na.action = na.omit) %>% 
+  anova() %>% 
+  kable() %>% 
+  kable_paper("hover", 
+              full_width = FALSE,
+              position = "float_left")
+```
+Cytokines include chemokines, interferons, interleukins, lymphokines, and tumour necrosis factors, but generally not hormones or growth factors (despite some overlap in the terminology). Cytokines are produced by a broad range of cells, including immune cells like macrophages, B lymphocytes, T lymphocytes and mast cells, as well as endothelial cells, fibroblasts, and various stromal cells; a given cytokine may be produced by more than one type of cell. They act through cell surface receptors and are especially important in the immune system; cytokines modulate the balance between humoral and cell-based immune responses, and they regulate the maturation, growth, and responsiveness of particular cell populations. Some cytokines enhance or inhibit the action of other cytokines in complex ways. They are different from hormones, which are also important cell signaling molecules. Hormones circulate in higher concentrations, and tend to be made by specific kinds of cells. Cytokines are important in health and disease, specifically in host immune responses to infection, inflammation, trauma, sepsis, cancer, and reproduction.
+
+<br>
+
+## Post-hoc t-tests
+```{r, message = FALSE}
+IL6_data %>% 
+  group_by(TP) %>% 
+  summarise(broom::tidy(t.test(Concentration ~ Treatment,
+                               var.equal = TRUE))) %>% 
+  select("TP", "statistic", "parameter", "p.value") %>% 
+  rename("df" = "parameter") %>% 
+  kable() %>% 
+  kable_classic_2("hover", 
+                  full_width = FALSE)
+```
+
+
+<br>
+
+## How correlated are observations across timepoints? 
+### Subsetting (TP_1, TP_2, Ctrl)
+```{r}
+IL6_sub_data <- IL6_data %>% 
+  filter(TP %in% c("TP_1", "TP_2"), 
+         Treatment == "Ctrl")
+```
+
+<br>
+
+### Plotting TP_1 vs TP_2
+```{r, message = FALSE, fig.align = "center"}
+IL6_sub_data %>% 
+  pivot_wider(names_from = TP, 
+              values_from = Concentration) %>% 
+  ggplot(aes(x = TP_1, y = TP_2))+
+    geom_point()+
+    geom_smooth(method = "lm")
+```
+
+<br>
+
+### Correlation between TP_1 and TP_2
+```{r}
+IL6_sub_data %>% 
+  pivot_wider(names_from = TP, 
+              values_from = Concentration) %>% 
+  select("TP_1", "TP_2") %>% 
+  cor(use = "pairwise.complete.obs") %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                full_width = FALSE)
+```
+
+<br>
+
+## Linear model
+```{r}
+IL6_sub_data %>% 
+  pivot_wider(names_from = TP, 
+              values_from = Concentration) %>% 
+  lm(TP_2~TP_1, 
+     data = .) %>% 
+  broom::tidy() %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"),
+                full_width = FALSE)
+```

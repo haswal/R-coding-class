@@ -14,28 +14,24 @@ output: html_document
 * Styling output from statistical models
 
 
-<!-- ## Script -->
+## Script
 
-<!-- The R markdown file for session 7 is available below. These include the R Markdown file and an additional CSV file that was used for a demonstration plot.  -->
+The R markdown file for session 7 is available below. 
 
 
+```{r, include = FALSE, eval = FALSE}
 
-<!-- ```{r, include = TRUE, echo = FALSE} -->
+# install and load these packages
+devtools::install_github('yihui/xfun')
 
-<!-- # install and load these packages -->
-<!-- # devtools::install_github('yihui/xfun') -->
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
 
-<!-- # embed_file() requires a few more packages -->
-<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
-<!-- ``` -->
-
-<!-- ```{r include = TRUE, echo = FALSE} -->
-<!-- # a embed single file -->
-<!-- xfun::embed_files(c("scripts/Stats_Report.Rmd", "scripts/auto_corr_data.csv"),  -->
-<!--                   text = paste("Download Session 7 files"),  -->
-<!--                   name = paste0("07_session", ".zip") -->
-<!--                   ) -->
-<!-- ``` -->
+```{r echo=FALSE}
+# a embed single file
+xfun::embed_file('Stats_report.Rmd')
+```
 
 
 ## Resources
