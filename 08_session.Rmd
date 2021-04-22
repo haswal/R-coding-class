@@ -1,0 +1,65 @@
+---
+title: 'Session 8: Intro to Inference and Bootstrapping'
+date: "Apr 23, 2021"
+output: html_document
+---
+
+
+## Agenda
+
+* Intro to Statistical Inference
+* Definitions of Confidence Intervals and p-value
+* Overall process of hypothesis testing
+* What is bootstrapping?
+* Use bootstrapping to construct 95% CIs for the mean of a variable
+* Simple p-value calculation using bootstrapping
+
+
+<!-- ## Script -->
+
+<!-- The R markdown file for session 7 is available below.  -->
+
+
+<!-- ```{r, include = FALSE, eval = FALSE} -->
+
+<!-- # install and load these packages -->
+<!-- devtools::install_github('yihui/xfun') -->
+
+<!-- # embed_file() requires a few more packages -->
+<!-- xfun::pkg_load2(c('base64enc', 'htmltools', 'mime')) -->
+<!-- ``` -->
+
+<!-- ```{r echo=FALSE} -->
+<!-- # a embed single file -->
+<!-- xfun::embed_file('Stats_report.Rmd') -->
+<!-- ``` -->
+
+
+## Resources
+
+### Statistical Inference 
+
+http://www.bristol.ac.uk/medical-school/media/rms/red/4_ideas_of_statistical_inference.html
+
+https://bolt.mph.ufl.edu/6050-6052/unit-4/
+
+### Confidence Intervals (interactive visualization)
+
+https://rpsychologist.com/d3/ci/
+
+### Bootstrapping 
+
+https://statisticsbyjim.com/hypothesis-testing/bootstrapping/
+
+https://machinelearningmastery.com/statistical-sampling-and-resampling/
+
+### The `purrr` package (iteration using `map_*` functions)
+
+https://r4ds.had.co.nz/iteration.html#the-map-functions
+
+## Homework
+This week I would like you to write code to calculate 95% confidence intervals for the median of a variable, using bootstrapping. For this exercise, you can use any data you like (cytokines, session 7 homework data, your own data, etc). Reuse code from what was shown in session 8, but instead of calculating confidence intervals for the mean, do it for the median. Once you have this working, try your method on a few different variables and plot the results. See if you can use the confidence intervals you calculated as errorbars following the instructions [here](https://www.datanovia.com/en/lessons/ggplot-error-bars/).  
+
+
+
+    
