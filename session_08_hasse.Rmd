@@ -1,0 +1,141 @@
+---
+title: "Bootstrapped p-value for one sample mean"
+output: html_document
+---
+\
+
+## Load packages and generate data
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+set.seed(112233)
+my_data <- tibble(values = rnorm(50, 1.5, 4.5))
+```
+
+\
+
+## Formal definition of p-value
+
+\
+
+> In significance testing, the p-value is the probability of obtaining test results at least as extreme as the results actually observed, under the assumption that the null hypothesis is correct
+
+\
+
+## Plotting the data
+```{r}
+my_data %>% 
+  ggplot(aes(x = values))+
+  geom_histogram(binwidth = 1.5)
+```
+
+\
+
+## Calculate how far from zero the mean of `values` is
+In this case our null hypothesis is that the true population mean is zero. Therefore, the the mean of `values` is the distance from the null hypothesis mean.  
+
+```{r}
+(obs_mean <- mean(my_data$values))
+
+```
+
+\
+
+## Writing a function for bootstrapping
+Since our null hypothesis is that the true population mean is zero, we want to create a sampling distribution representing possible means if the mean was indeed zero. Bootstrapping will create a sampling distribution with the same mean as the sample. Therefore, to use bootstrapping to create a null distribution, we first need to rescale our sample data so that the mean is zero. This can be done by subtracting the mean from all observations in `values`. 
+
+Next we use the `sample()` function to draw observations from our rescaled sample data and set `replace = TRUE` to sample with replacement. 
+
+Finally, since we are using bootstrapping to create a sampling distribution, we want our function to output a summary statistic (estimate). In this case we calculate and return the mean. 
+
+```{r}
+boot_mean_diff <- function(data, col){
+  data %>% 
+    transmute(scaled = {{col}} - (mean({{col}})),
+              shuffled = sample(scaled, replace = TRUE)) %>% 
+    summarise(m = mean(shuffled))
+}
+```
+
+\
+
+## Running our function once to make sure it works
+```{r}
+boot_mean_diff(my_data, values)
+```
+
+\
+
+## Running our function many times to create a sampling distribution
+Here we use one of the `map_*` functions from the `purrr` package (included in the tidyverse), to rerun our function multiple times. Note that the number of times you want to run the function should be stated as a vector (`1:x`). The `~` tells the map function that what follows is the funtion to repeat. The `dfr` part of `map_dfr` stands for "data frame" and the output from this function will therefore be a tibble.  
+
+```{r}
+res <- map_dfr(1:1000, ~boot_mean_diff(my_data, values))
+```
+
+\
+
+## Plot histogram of the bootstrapped sampling distibution
+Notice that the center of the distribution is about zero. This is what we want to be able to calculate the p-value, and is a consequence of the fact that we rescaled our sample before resampling. The dashed line represents the observed sample mean. 
+
+```{r, message=FALSE}
+res %>% 
+  ggplot(aes(x = m))+
+  geom_histogram()+
+  geom_vline(xintercept = obs_mean,
+             color = "red",
+             linetype = "dashed")
+```
+
+\
+
+## Calculate p-value
+The probability of obtaining our result (the observed mean), given the null hypothesis that the true mean is zero, is the proportion of values in our sampling distribution more extreme than the observed mean.
+
+```{r}
+res %>% 
+  summarise(p_value = mean(m >= obs_mean))
+```
+
+But what about if our observed mean was negative instead of positive?
+
+```{r, message=FALSE}
+res %>% 
+  ggplot(aes(x = m))+
+  geom_histogram()+
+  geom_vline(xintercept = -obs_mean,
+             color = "red",
+             linetype = "dashed")
+```
+
+```{r}
+res %>% 
+  summarise(p_value = mean(m >= -obs_mean))
+```
+
+\
+
+## Calculating two-sided p-value
+To avoid the problem shown above, that we direction of the effect needs to be specified beforehand to get a sensical p-value, we instead calculate the two-sided p-value. This means that we are interested in finding out how extreme our observed mean is irrespective of sign. To do this we take the absolute value of both our sampling distribution and observed mean, and calculate the p-value accordingly. 
+
+```{r, message=FALSE}
+res %>% 
+  ggplot(aes(x = abs(m)))+
+  geom_histogram(binwidth = 0.2)+
+  geom_vline(xintercept = abs(obs_mean),
+             color = "red",
+             linetype = "dashed")
+```
+
+```{r}
+res %>% 
+  summarise(p_value = mean(abs(m) >= abs(obs_mean)))
+```
+
+\
+
+## Compare output to `t.test()`
+```{r}
+t.test(my_data$values)
+```
+

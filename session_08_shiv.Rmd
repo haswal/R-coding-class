@@ -1,0 +1,54 @@
+---
+title: "Session_4/23"
+author: "Shiv Chawla and Hasse Walum"
+date: "4/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+#intuitve bootstrapping 
+
+#simulate some data 
+set.seed(112233)
+my_data<-tibble(values = rnorm(50, 1.5, 4.5))
+
+#save the mean of this dataset as an object 
+g<-mean(my_data$values)
+
+# Writing a function that will create a bootstrapped sample of the mean
+rand_ci<-function(data, col){
+  data %>% 
+    transmute(shuffled = sample({{col}}, replace = TRUE)) %>% 
+    summarise(m = mean(shuffled))
+}
+
+#run the function 
+h<-map_dfr(1:1000, ~rand_ci(my_data,values))
+
+
+#based off the bootstrapped mean, calculate a lower and upper value for the confidence interval
+i<-h%>%
+  summarise(mean = mean(m), lowerci = quantile(m, prob = 0.025), upperci = quantile(m, prob = 0.975))
+
+
+#plot the bootstrapped sample of the mean with a line corresponding with the original mean, and two more lines corresponding with the 95% confidence interval 
+h%>%
+  ggplot(aes(x = m))+
+  geom_histogram(fill="#3F00FF", color="#3F00FF")+
+  geom_vline(xintercept = g, colour="#2EFF00", linetype = "longdash", size = 1.6)+
+  geom_vline(aes(xintercept = lowerci),data = i,size = 1.6, color = "#FF0000")+
+  geom_vline(aes(xintercept = upperci), data = i,size = 1.6, color = "#FF0000")+
+   theme_bw() +
+  theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+```
+
