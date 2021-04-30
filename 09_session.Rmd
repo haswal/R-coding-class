@@ -1,0 +1,23 @@
+---
+title: 'Session 9: Randomization tests and group differences'
+date: "Apr 30, 2021"
+output: html_document
+---
+
+
+## Agenda
+
+* Nested custom functions
+* How to use randomization tests to calculate p-values for group differences
+* How to use within group bootstrapping to calculate confidence intervals for group differences
+
+## Resources
+
+### Randomization tests
+
+https://www.uvm.edu/~statdhtx/StatPages/Randomization%20Tests/RandomizationTestsOverview.html
+
+https://measuringu.com/randomization-test/
+
+## Homework
+This week I would like you to code up a method that will allow you to use bootstrapping to calculate the p-value comparing the mean of any variable to a value of your choosing. In a previous session, I showed you how to compare the mean of a variable to zero, and calculate the p-value accordingly. Using the code I gave you as a starting point, you should figure out how to compare the mean to any value you give the function (e.g. `my_boot_fun(data, col, value = 2)`) and calculate the p-value under this null hypothesis. Make sure you calculate the two-sided p-value. Compare the results from your method to the output from `t.test()` and set the value in that function you want to compare to using the `mu` option (e.g. `mu = 2`).  

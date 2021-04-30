@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Dr. Hasse Walum" />
 
 
-<title>Marcus R Coding Class</title>
+<title>Session 9: Randomization tests and group differences</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -61,7 +60,6 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="home.css" type="text/css" />
 <link rel="stylesheet" href="style.css" type="text/css" />
 
 
@@ -374,55 +372,31 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Marcus R Coding Class</h1>
-<h4 class="author"><a href="https://scholar.google.se/citations?user=kIwmUAIAAAAJ&amp;hl=en">Dr. Hasse Walum</a></h4>
+<h1 class="title toc-ignore">Session 9: Randomization tests and group differences</h1>
+<h4 class="date">Apr 30, 2021</h4>
 
 </div>
 
 
-<div id="welcome" class="section level2">
-<h2>Welcome!</h2>
-<p>This is the class website. Here you will find posted resources for each lesson.</p>
-</div>
-<div id="installing-r-and-rstudio" class="section level2">
-<h2>Installing R and RStudio</h2>
-<p>Before we can get started we need to install <strong>two</strong> different software programs, R and RStudio.</p>
-<div id="start-by-installing-r" class="section level4">
-<h4>Start by installing R:</h4>
+<div id="agenda" class="section level2">
+<h2>Agenda</h2>
 <ul>
-<li>Go to <a href="https://cran.r-project.org">cran.r-project.org</a>
-<ul>
-<li>Windows users click <strong>Download R for Windows</strong> and on the next page <strong>install R for the first time</strong> and finally <strong>Download R 4.0.4 for Windows</strong>.</li>
-<li>Mac users click <strong>Download R for (Mac) OS X</strong> and on the next page pick the version matching the OS version you are using (for most users <strong>R-4.0.4.pkg</strong> will be the right choice).</li>
-</ul></li>
+<li>Nested custom functions</li>
+<li>How to use randomization tests to calculate p-values for group differences</li>
+<li>How to use within group bootstrapping to calculate confidence intervals for group differences</li>
 </ul>
 </div>
-<div id="next-we-will-install-rstudio" class="section level4">
-<h4>Next we will install RStudio:</h4>
-<ul>
-<li>Go to the <a href="https://rstudio.com/products/rstudio/download/">rstudio.com</a> download page</li>
-<li>Scroll down until you see a blue rectangle with the text <strong>DOWNLOAD RSTUDIO FOR X</strong>, where x is the OS of the machine you are using. Click to download.</li>
-<li>Alternatively, scroll down a bit more and find the right version of RStudio for your OS under the header <strong>All Installers</strong>.</li>
-</ul>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<div id="randomization-tests" class="section level3">
+<h3>Randomization tests</h3>
+<p><a href="https://www.uvm.edu/~statdhtx/StatPages/Randomization%20Tests/RandomizationTestsOverview.html" class="uri">https://www.uvm.edu/~statdhtx/StatPages/Randomization%20Tests/RandomizationTestsOverview.html</a></p>
+<p><a href="https://measuringu.com/randomization-test/" class="uri">https://measuringu.com/randomization-test/</a></p>
 </div>
 </div>
-<div id="installing-the-tidyverse" class="section level2">
-<h2>Installing the <code>tidyverse</code></h2>
-<p>The tidyverse is a suite of packages that will allow us to use some of the most common data science tools used in R and RStudio. The tidyverse doesn’t come built-in with R, so you’ll need to install it by doing the following:</p>
-<ul>
-<li>Open up RStudio</li>
-<li>Copy and paste the following into the <em>Console</em> pane of RStudio (see the image below as a reference): <code>install.packages("tidyverse")</code></li>
-</ul>
-<center>
-<img src="console.png" style="width:90.0%" />
-</center>
-<p><br />
-</p>
-<ul>
-<li>Press the Enter key to run this line of code</li>
-<li>When you’ve installed the package successfully, the console will fill up with some code that you don’t have to worry about trying to read. It’s just R confirming that the tidyverse is now downloaded.</li>
-</ul>
-<p>Now you’re all set to for the first session!</p>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
+<p>This week I would like you to code up a method that will allow you to use bootstrapping to calculate the p-value comparing the mean of any variable to a value of your choosing. In a previous session, I showed you how to compare the mean of a variable to zero, and calculate the p-value accordingly. Using the code I gave you as a starting point, you should figure out how to compare the mean to any value you give the function (e.g. <code>my_boot_fun(data, col, value = 2)</code>) and calculate the p-value under this null hypothesis. Make sure you calculate the two-sided p-value. Compare the results from your method to the output from <code>t.test()</code> and set the value in that function you want to compare to using the <code>mu</code> option (e.g. <code>mu = 2</code>).</p>
 </div>
 
 

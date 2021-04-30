@@ -9,10 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Dr. Hasse Walum" />
 
 
-<title>Marcus R Coding Class</title>
+<title>Bootstrapped p-value for one sample mean</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -61,7 +60,6 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="home.css" type="text/css" />
 <link rel="stylesheet" href="style.css" type="text/css" />
 
 
@@ -374,55 +372,152 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Marcus R Coding Class</h1>
-<h4 class="author"><a href="https://scholar.google.se/citations?user=kIwmUAIAAAAJ&amp;hl=en">Dr. Hasse Walum</a></h4>
+<h1 class="title toc-ignore">Bootstrapped p-value for one sample mean</h1>
 
 </div>
 
 
-<div id="welcome" class="section level2">
-<h2>Welcome!</h2>
-<p>This is the class website. Here you will find posted resources for each lesson.</p>
-</div>
-<div id="installing-r-and-rstudio" class="section level2">
-<h2>Installing R and RStudio</h2>
-<p>Before we can get started we need to install <strong>two</strong> different software programs, R and RStudio.</p>
-<div id="start-by-installing-r" class="section level4">
-<h4>Start by installing R:</h4>
-<ul>
-<li>Go to <a href="https://cran.r-project.org">cran.r-project.org</a>
-<ul>
-<li>Windows users click <strong>Download R for Windows</strong> and on the next page <strong>install R for the first time</strong> and finally <strong>Download R 4.0.4 for Windows</strong>.</li>
-<li>Mac users click <strong>Download R for (Mac) OS X</strong> and on the next page pick the version matching the OS version you are using (for most users <strong>R-4.0.4.pkg</strong> will be the right choice).</li>
-</ul></li>
-</ul>
-</div>
-<div id="next-we-will-install-rstudio" class="section level4">
-<h4>Next we will install RStudio:</h4>
-<ul>
-<li>Go to the <a href="https://rstudio.com/products/rstudio/download/">rstudio.com</a> download page</li>
-<li>Scroll down until you see a blue rectangle with the text <strong>DOWNLOAD RSTUDIO FOR X</strong>, where x is the OS of the machine you are using. Click to download.</li>
-<li>Alternatively, scroll down a bit more and find the right version of RStudio for your OS under the header <strong>All Installers</strong>.</li>
-</ul>
-</div>
-</div>
-<div id="installing-the-tidyverse" class="section level2">
-<h2>Installing the <code>tidyverse</code></h2>
-<p>The tidyverse is a suite of packages that will allow us to use some of the most common data science tools used in R and RStudio. The tidyverse doesn’t come built-in with R, so you’ll need to install it by doing the following:</p>
-<ul>
-<li>Open up RStudio</li>
-<li>Copy and paste the following into the <em>Console</em> pane of RStudio (see the image below as a reference): <code>install.packages("tidyverse")</code></li>
-</ul>
-<center>
-<img src="console.png" style="width:90.0%" />
-</center>
 <p><br />
 </p>
-<ul>
-<li>Press the Enter key to run this line of code</li>
-<li>When you’ve installed the package successfully, the console will fill up with some code that you don’t have to worry about trying to read. It’s just R confirming that the tidyverse is now downloaded.</li>
-</ul>
-<p>Now you’re all set to for the first session!</p>
+<div id="load-packages-and-generate-data" class="section level2">
+<h2>Load packages and generate data</h2>
+<pre class="r"><code>library(tidyverse)
+
+set.seed(112233)
+my_data &lt;- tibble(values = rnorm(50, 1.5, 4.5))</code></pre>
+<p><br />
+</p>
+</div>
+<div id="formal-definition-of-p-value" class="section level2">
+<h2>Formal definition of p-value</h2>
+<p><br />
+</p>
+<blockquote>
+<p>In significance testing, the p-value is the probability of obtaining test results at least as extreme as the results actually observed, under the assumption that the null hypothesis is correct</p>
+</blockquote>
+<p><br />
+</p>
+</div>
+<div id="plotting-the-data" class="section level2">
+<h2>Plotting the data</h2>
+<pre class="r"><code>my_data %&gt;% 
+  ggplot(aes(x = values))+
+  geom_histogram(binwidth = 1.5)</code></pre>
+<p><img src="session_08_hasse_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><br />
+</p>
+</div>
+<div id="calculate-how-far-from-zero-the-mean-of-values-is" class="section level2">
+<h2>Calculate how far from zero the mean of <code>values</code> is</h2>
+<p>In this case our null hypothesis is that the true population mean is zero. Therefore, the the mean of <code>values</code> is the distance from the null hypothesis mean.</p>
+<pre class="r"><code>(obs_mean &lt;- mean(my_data$values))</code></pre>
+<pre><code>## [1] 1.436263</code></pre>
+<p><br />
+</p>
+</div>
+<div id="writing-a-function-for-bootstrapping" class="section level2">
+<h2>Writing a function for bootstrapping</h2>
+<p>Since our null hypothesis is that the true population mean is zero, we want to create a sampling distribution representing possible means if the mean was indeed zero. Bootstrapping will create a sampling distribution with the same mean as the sample. Therefore, to use bootstrapping to create a null distribution, we first need to rescale our sample data so that the mean is zero. This can be done by subtracting the mean from all observations in <code>values</code>.</p>
+<p>Next we use the <code>sample()</code> function to draw observations from our rescaled sample data and set <code>replace = TRUE</code> to sample with replacement.</p>
+<p>Finally, since we are using bootstrapping to create a sampling distribution, we want our function to output a summary statistic (estimate). In this case we calculate and return the mean.</p>
+<pre class="r"><code>boot_mean_diff &lt;- function(data, col){
+  data %&gt;% 
+    transmute(scaled = {{col}} - (mean({{col}})),
+              shuffled = sample(scaled, replace = TRUE)) %&gt;% 
+    summarise(m = mean(shuffled))
+}</code></pre>
+<p><br />
+</p>
+</div>
+<div id="running-our-function-once-to-make-sure-it-works" class="section level2">
+<h2>Running our function once to make sure it works</h2>
+<pre class="r"><code>boot_mean_diff(my_data, values)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##       m
+##   &lt;dbl&gt;
+## 1 0.441</code></pre>
+<p><br />
+</p>
+</div>
+<div id="running-our-function-many-times-to-create-a-sampling-distribution" class="section level2">
+<h2>Running our function many times to create a sampling distribution</h2>
+<p>Here we use one of the <code>map_*</code> functions from the <code>purrr</code> package (included in the tidyverse), to rerun our function multiple times. Note that the number of times you want to run the function should be stated as a vector (<code>1:x</code>). The <code>~</code> tells the map function that what follows is the funtion to repeat. The <code>dfr</code> part of <code>map_dfr</code> stands for “data frame” and the output from this function will therefore be a tibble.</p>
+<pre class="r"><code>res &lt;- map_dfr(1:1000, ~boot_mean_diff(my_data, values))</code></pre>
+<p><br />
+</p>
+</div>
+<div id="plot-histogram-of-the-bootstrapped-sampling-distibution" class="section level2">
+<h2>Plot histogram of the bootstrapped sampling distibution</h2>
+<p>Notice that the center of the distribution is about zero. This is what we want to be able to calculate the p-value, and is a consequence of the fact that we rescaled our sample before resampling. The dashed line represents the observed sample mean.</p>
+<pre class="r"><code>res %&gt;% 
+  ggplot(aes(x = m))+
+  geom_histogram()+
+  geom_vline(xintercept = obs_mean,
+             color = &quot;red&quot;,
+             linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="session_08_hasse_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><br />
+</p>
+</div>
+<div id="calculate-p-value" class="section level2">
+<h2>Calculate p-value</h2>
+<p>The probability of obtaining our result (the observed mean), given the null hypothesis that the true mean is zero, is the proportion of values in our sampling distribution more extreme than the observed mean.</p>
+<pre class="r"><code>res %&gt;% 
+  summarise(p_value = mean(m &gt;= obs_mean))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.019</code></pre>
+<p>But what about if our observed mean was negative instead of positive?</p>
+<pre class="r"><code>res %&gt;% 
+  ggplot(aes(x = m))+
+  geom_histogram()+
+  geom_vline(xintercept = -obs_mean,
+             color = &quot;red&quot;,
+             linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="session_08_hasse_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>res %&gt;% 
+  summarise(p_value = mean(m &gt;= -obs_mean))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.975</code></pre>
+<p><br />
+</p>
+</div>
+<div id="calculating-two-sided-p-value" class="section level2">
+<h2>Calculating two-sided p-value</h2>
+<p>To avoid the problem shown above, that we direction of the effect needs to be specified beforehand to get a sensical p-value, we instead calculate the two-sided p-value. This means that we are interested in finding out how extreme our observed mean is irrespective of sign. To do this we take the absolute value of both our sampling distribution and observed mean, and calculate the p-value accordingly.</p>
+<pre class="r"><code>res %&gt;% 
+  ggplot(aes(x = abs(m)))+
+  geom_histogram(binwidth = 0.2)+
+  geom_vline(xintercept = abs(obs_mean),
+             color = &quot;red&quot;,
+             linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="session_08_hasse_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>res %&gt;% 
+  summarise(p_value = mean(abs(m) &gt;= abs(obs_mean)))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.044</code></pre>
+<p><br />
+</p>
+</div>
+<div id="compare-output-to-t.test" class="section level2">
+<h2>Compare output to <code>t.test()</code></h2>
+<pre class="r"><code>t.test(my_data$values)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  my_data$values
+## t = 2.0647, df = 49, p-value = 0.04427
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  0.03833432 2.83419085
+## sample estimates:
+## mean of x 
+##  1.436263</code></pre>
 </div>
 
 
