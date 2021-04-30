@@ -1,0 +1,152 @@
+---
+title: "Randomization p-value for group differences"
+output: html_document
+---
+\
+
+## Load packages and generate data
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+set.seed(112233)
+my_data <- tibble(values = c(rnorm(50, 1.5, 1),
+                             rnorm(50, 1.8, 1)),
+                  group = rep(c("Ctrl","Drug"),
+                              each = 50))
+```
+
+\
+
+## Plotting the data
+```{r}
+my_data %>% 
+  ggplot(aes(x = group, 
+             y = values,
+             fill = group))+
+  geom_boxplot()+
+  scale_fill_manual(values = c("grey90", 
+                               "cornflowerblue"))+
+  theme_classic()
+```
+
+\
+
+## Calculate mean difference of `values` across groups
+The calculations we will look at below will be about the mean difference between our two groups, and therefore our observed value in this case will be the mean difference. Use the `pull()` function to convert a one column data frame to a vector. 
+
+```{r, message=FALSE}
+(mean_diff <- my_data %>% 
+  group_by(group) %>% 
+  summarise(m = mean(values)) %>% 
+  summarise(d = diff(m)) %>% 
+  pull())
+
+```
+
+\
+
+## Writing a function for randomization
+Randomization tests, just like bootstrapping, belong to the larger category of statistical tests referred to as resampling methods. Randomization is used to create sampling distributions under the null hypothesis that no *group* differences exist in the population. This is done by breaking up the true relationship between sample data groups, by shuffling individuals to the different groups randomly. Groups sizes are maintained, but for each randomization the individuals, and hence values, belonging to the different groups will vary. On average, this will result in no difference between the groups and therefore the sampling distribution will be centered about zero and represent the possible observed values under the null hypothesis that no real population group difference exists. The code below shows how put together a randomization test for group mean differences, and is statistically equivalent to a two-sample t-test.     
+
+```{r}
+rand_mean_diff <- function(data, col, group){
+  data %>% 
+    transmute({{group}},
+              shuffled = sample({{col}}, replace = FALSE)) %>% 
+    group_by({{group}}) %>% 
+    summarise(m = mean(shuffled)) %>% 
+    summarise(d = diff(m))
+}
+```
+
+\
+
+## Running our function once to make sure it works
+```{r, message=FALSE}
+rand_mean_diff(my_data, values, group)
+```
+
+\
+
+## Running our function many times to create a sampling distribution
+
+```{r message=FALSE}
+res <- map_dfr(1:1000, ~rand_mean_diff(my_data, values, group))
+```
+
+\
+
+## Plot histogram of the bootstrapped sampling distibution
+
+```{r, message=FALSE}
+res %>% 
+  ggplot(aes(x = d))+
+  geom_histogram()+
+  geom_vline(xintercept = mean_diff,
+             color = "red",
+             linetype = "dashed")+
+  theme_minimal()
+```
+
+\
+
+## Calculating two-sided p-value
+
+```{r}
+res %>% 
+  summarise(p_value = mean(abs(d) >= abs(mean_diff)))
+```
+
+\
+
+## Compare output to `t.test()`
+```{r}
+t.test(values~group, data = my_data)$p.value
+```
+
+\
+
+# Part 2: Calculating 95% confidence intervals for the mean difference
+
+\
+
+## Writing a function for bootstrapping
+When constructing confidence intervals for mean differences using bootstrapping, we sample with replacement *within* our groups and calculate the mean difference of these now bootstrapped groups. By using the `group_by()` function before sampling, we make sure the bootstrapping is being done in the groups separately. Also, the grouping is maintained when we get to the `summarise()` step, meaning that `mean(shuffled)` will calculate the mean per (bootstrapped) group.
+
+```{r, message=FALSE}
+boot_mean_diff <- function(data, col, group){
+  data %>% 
+    group_by({{group}}) %>% 
+    transmute({{group}},
+              shuffled = sample({{col}}, replace = TRUE)) %>% 
+    summarise(m = mean(shuffled)) %>% 
+    summarise(d = diff(m))
+}
+
+```
+
+\
+
+## Running our function many times to create a sampling distribution
+
+```{r message=FALSE}
+res2 <- map_dfr(1:1000, ~boot_mean_diff(my_data, values, group))
+```
+
+\
+
+## Calculating 95% confidence intervals 
+
+```{r message=FALSE}
+res2 %>% 
+  summarise(lowerCI = quantile(d, prob = 0.025),
+            upperCI = quantile(d, prob = 0.975)) 
+```
+
+\
+
+## Compare output to `t.test()` 
+
+```{r message=FALSE}
+t.test(values~group, data = my_data)$conf.int
+```

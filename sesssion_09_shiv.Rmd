@@ -1,0 +1,92 @@
+---
+title: "Session_09clean"
+author: "Shiv Chawla and Hasse Walum"
+date: "4/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(glue)
+library(rlang)
+
+#simulate data
+set.seed(112233)
+values <-rnorm(50, 1.5, 4.5)
+my_data<-as.data.frame(x = values)
+
+
+#create function to output pvalues
+pvald<-function(data,col, N, sided){
+de_mean <- data %>% 
+  summarise(me = mean({{col}}))
+
+#create function to bootstrap
+boot_mean_diff <- function(data, col){
+ data%>% 
+    transmute(scaled =({{col}} - (mean({{col}}))),
+              shuffled = sample(scaled, replace = TRUE))%>% 
+    summarise(m = mean(shuffled))
+}  
+res<-map_dfr(1:N, ~boot_mean_diff(data, {{col}}))
+
+#if else for 1 sided or 2 sided t-test
+pvalq<-if (sided == 1){
+ res%>%
+    summarise(p_value = mean(. >= de_mean$me))
+}
+else{
+  res%>%
+  summarise(p_value = mean(abs(.) >= abs(de_mean$me)))
+}
+
+#string for future use if else when p=0
+string = "<1/{N}"
+
+yn<-if (pvalq$p_value==0){
+ glue(string)
+}
+else{
+NA
+}
+
+#printing if else to include p=0 or not, that is the question
+jmoney<- if(pvalq$p_value==0){
+   dfp <- tibble(as.character(yn, N ))
+  colnames(dfp) <- c("pvalue", "iterations")
+  return(dfp)
+  
+}
+else{
+ dfg <- tibble(as.character(pvalq, N ))
+  colnames(dfg) <- c("pvalue", "iterations")
+  return(dfg)
+}
+return(jmoney)
+}
+
+#create simulated dataset with 3 different groups (random sample, different means) 
+#calculate pvalue by each group seperately 
+
+set.seed(11224)
+new_data <- tibble(values = c(rnorm(50, 1, 1),
+                              rnorm(50, 0, 1),
+                              rnorm(50, 0, 1)), 
+                   group = rep(c("Group_1", 
+                                 "Group_2", 
+                                 "Group_3"), each = 50))
+
+#pipe it up, use group_by, and get some pvalues 
+new_data%>%
+  group_by(group)%>%
+  group_modify(~pvald(.,values, 1000,2))
+
+
+```
+

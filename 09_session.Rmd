@@ -11,6 +11,28 @@ output: html_document
 * How to use randomization tests to calculate p-values for group differences
 * How to use within group bootstrapping to calculate confidence intervals for group differences
 
+## Scripts
+
+The R markdown files from session 9 are available below.
+
+```{r, include = FALSE, eval = FALSE}
+
+# install and load these packages
+devtools::install_github('yihui/xfun')
+
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+```{r include = TRUE, echo = FALSE}
+# a embed single file
+xfun::embed_files(c("session_09_shiv.Rmd", "session_09_hasse.Rmd"), 
+                  text = paste("Download Session 9 R markdown files"), 
+                  name = paste0("09_session", ".zip")
+                  )
+```
+
+
 ## Resources
 
 ### Randomization tests
