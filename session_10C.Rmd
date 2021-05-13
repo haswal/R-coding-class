@@ -1,0 +1,103 @@
+---
+title: "Cohen's *d*"
+output: html_document
+---
+
+\
+
+## Load packages and generate data
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(MASS)
+library(cowplot)
+
+d1 <- tibble(values = c(mvrnorm(2000, 2, 1),
+                        mvrnorm(2000, 2.5, 1)),
+             group = rep(c("Ctrl", "Drug"), each = 2000))
+
+d2 <- tibble(values = c(mvrnorm(2000, 2, 2^2),
+                        mvrnorm(2000, 2.5, 2^2)),
+             group = rep(c("Ctrl", "Drug"), each = 2000))
+
+d3 <- tibble(values = c(mvrnorm(2000, 2, 4^2),
+                        mvrnorm(2000, 2.5, 4^2)),
+             group = rep(c("Ctrl", "Drug"), each = 2000))
+```
+
+\
+
+## Cohen's *d*
+
+The equation to calculate Cohen's *d* is shown below. The concept is quite simple mathematically; the mean value difference is divided by a combined measure of standard deviation often referred to as the pooled standard deviation. 
+
+\
+
+$$ 
+Cohen's \,d = \frac{M_{2}-M_{1}}{pooled\,SD}
+$$
+\
+
+There are different ways the pooled standard deviation can be calculated. Below is the simplest way of doing it, but this method can result in sub-optimal results if group sizes are very different.
+
+\
+
+$$
+pooled\, SD = \sqrt{\frac{SD_{1}^2+ SD_{2}^2}{2}}
+$$
+
+\
+
+A "safer" way of calculating the pooled standard deviation includes sample sizes, as shown below. 
+
+\
+
+$$
+pooled\, SD = \sqrt{\frac{SD_{1}^2(n_{1}-1)+ SD_{2}^2(n_{2}-1)}{n_{1}+n_{2}-2}}
+$$
+
+\
+
+where $SD_{1}$ is the standard deviation of group one, $SD_{2}$ is the standard deviation of group two, and $n_{1}$ and $n_{2}$ are the sample sizes of group one and two, respectively. 
+
+\
+
+## Function to calculate Cohen's *d*
+
+```{r}
+CD <- function(data, values, group){
+  m_diff <- data %>% 
+    group_by({{group}}) %>% 
+    summarise(m = mean({{values}})) %>% 
+    summarize(d = diff(m)) %>% 
+    pull()
+  
+  p_sdev <- data %>% 
+    group_by({{group}}) %>% 
+    summarise(sd = sd({{values}})) %>% 
+    transmute(sd_sq = sd^2) %>% 
+    summarise(sqrt(sum(sd_sq)/2)) %>% 
+    pull()
+  
+  return(m_diff/p_sdev)
+} 
+```
+
+\
+
+## Cohen's *d* results
+```{r, message=FALSE}
+CD(d1, values, group)
+CD(d2, values, group)
+CD(d3, values, group)
+
+```
+
+\
+
+## Using `summarise`
+```{r, message=FALSE}
+d1 %>% 
+  summarise(cd = CD(., values, group))
+```
+
+

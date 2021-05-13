@@ -9,6 +9,29 @@ output: html_document
 * How are sampling distributions affected by sample size and variance?
 * Intro to standardized effect sizes; Cohen's *d* 
 
+## Scripts
+
+The R markdown files from session 10 are available below.
+
+```{r, include = FALSE, eval = FALSE}
+
+# install and load these packages
+devtools::install_github('yihui/xfun')
+
+# embed_file() requires a few more packages
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+```{r include = TRUE, echo = FALSE}
+# a embed single file
+xfun::embed_files(c("session_10A.Rmd", 
+                    "session_10B.Rmd",
+                    "session_10C.Rmd"), 
+                  text = paste("Download Session 10 R markdown files"), 
+                  name = paste0("10_session", ".zip")
+                  )
+```
+
 ## Resources
 
 ### Effect sizes in general
