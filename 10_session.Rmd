@@ -1,0 +1,26 @@
+---
+title: 'Session 10: Sampling variability and Effect size'
+date: "May 7, 2021"
+output: html_document
+---
+
+## Agenda
+
+* How are sampling distributions affected by sample size and variance?
+* Intro to standardized effect sizes; Cohen's *d* 
+
+## Resources
+
+### Effect sizes in general
+
+https://www.statisticssolutions.com/statistical-analyses-effect-size/
+
+https://www.scribbr.com/statistics/effect-size/
+
+### Cohen's *d*
+
+https://rpsychologist.com/cohend/
+
+## Homework
+The homework this week will be about statistical inference based on the Cohen's *d* effect size. First, write a function to calculate Cohen's *d*, taking sample size into account when calculating the pooled standard deviation. Next, try out your function on data of your choosing, and assess the probability that you would observe the Cohen's *d* (or something more extreme) you see in your data under the null hypothesis that the true *d* value in the population is zero. In other words, use a randomization test to calculate the p-value for the effect size. 
+

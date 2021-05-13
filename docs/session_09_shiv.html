@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Shiv Chawla and Hasse Walum" />
 
 
-<title>Resources</title>
+<title>Session_09clean</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -375,38 +376,117 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Resources</h1>
+<h1 class="title toc-ignore">Session_09clean</h1>
+<h4 class="author">Shiv Chawla and Hasse Walum</h4>
+<h4 class="date">4/29/2021</h4>
 
 </div>
 
 
-<p>Here you can find links to the reference text and other helpful guides and examples.</p>
-<div id="textbook-r-for-data-science" class="section level3">
-<h3>Textbook: R for Data Science</h3>
-<p><a href="https://r4ds.had.co.nz/">R For Data Science</a> is a <strong>free</strong> online text by Hadley Wickham and Garrett Grolemund. This is our workshop textbook. We won’t use this book chapter by chapter necessarily, but we will base many of our exercises off of this text.</p>
-<p><a href="https://r4ds.had.co.nz/"><img src="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" style="width:25.0%" /></a></p>
-<!-- ### Twitte`R` -->
-<!-- The `#rstats` community on Twitter is highly active and a great resource for learning and sharing all things R. Check it out! -->
-<!-- https://twitter.com/hashtag/rstats?lang=en -->
-<!-- ### TidyTuesday -->
-<!-- An interesting and new data set each week to practice transforming and plotting.  -->
-<!-- https://github.com/rfordatascience/tidytuesday -->
-<!-- Folks often share their plots (and link to their R code) on Twitter with [#tidytuesday](https://twitter.com/search?q=tidytuesday&src=typed_query&f=live). -->
-<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tune in today at 🚨 7 PM ET 🚨 for another LIVE <a href="https://twitter.com/hashtag/tidytuesday?src=hash&amp;ref_src=twsrc%5Etfw">#tidytuesday</a> screencast. We&#39;ll be analyzing extinct plants! 🌱🌿🍁🍂<br><br>This week only is two hours LATER than the usual screencasts (so if you&#39;re in Australia, now&#39;s your chance to join live!) 😉 🇦🇺<a href="https://t.co/GJURrXOtD4">https://t.co/GJURrXOtD4</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/1295809704145424391?ref_src=twsrc%5Etfw">August 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
-<!-- ### RStudio Education Website -->
-<!-- [https://education.rstudio.com/](https://education.rstudio.com/) - This site has a good, curated set of helpful links to help you start or learn how to do more with R. -->
-<!-- ### Interactive Practice -->
-<!-- [RStudio Cloud Primers](https://rstudio.cloud/learn/primers) - These are some short exercises that use interactive windows for practicing specific skills.  -->
-</div>
-<div id="teacups-giraffes-statistics" class="section level3">
-<h3>Teacups, Giraffes, &amp; Statistics</h3>
-<p><a href="https://tinystats.github.io/teacups-giraffes-and-statistics/" class="uri">https://tinystats.github.io/teacups-giraffes-and-statistics/</a></p>
-<!-- ### Other websites -->
-<!-- All of the links below are sites built using R.  -->
-<!-- * A book: https://smltar.com/ -->
-<!-- * A blog: http://desiree.rbind.io/ -->
-<!-- * A project site: https://www.tidymodels.org/ -->
-</div>
+<pre class="r"><code>library(tidyverse)
+library(magrittr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<pre class="r"><code>library(glue)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;glue&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<pre class="r"><code>library(rlang)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rlang&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:magrittr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following objects are masked from &#39;package:purrr&#39;:
+## 
+##     %@%, as_function, flatten, flatten_chr, flatten_dbl,
+##     flatten_int, flatten_lgl, flatten_raw, invoke,
+##     list_along, modify, prepend, splice</code></pre>
+<pre class="r"><code>#simulate data
+set.seed(112233)
+values &lt;-rnorm(50, 1.5, 4.5)
+my_data&lt;-as.data.frame(x = values)
+
+
+#create function to output pvalues
+pvald&lt;-function(data,col, N, sided){
+de_mean &lt;- data %&gt;% 
+  summarise(me = mean({{col}}))
+
+#create function to bootstrap
+boot_mean_diff &lt;- function(data, col){
+ data%&gt;% 
+    transmute(scaled =({{col}} - (mean({{col}}))),
+              shuffled = sample(scaled, replace = TRUE))%&gt;% 
+    summarise(m = mean(shuffled))
+}  
+res&lt;-map_dfr(1:N, ~boot_mean_diff(data, {{col}}))
+
+#if else for 1 sided or 2 sided t-test
+pvalq&lt;-if (sided == 1){
+ res%&gt;%
+    summarise(p_value = mean(. &gt;= de_mean$me))
+}
+else{
+  res%&gt;%
+  summarise(p_value = mean(abs(.) &gt;= abs(de_mean$me)))
+}
+
+#string for future use if else when p=0
+string = &quot;&lt;1/{N}&quot;
+
+yn&lt;-if (pvalq$p_value==0){
+ glue(string)
+}
+else{
+NA
+}
+
+#printing if else to include p=0 or not, that is the question
+jmoney&lt;- if(pvalq$p_value==0){
+   dfp &lt;- tibble(as.character(yn, N ))
+  colnames(dfp) &lt;- c(&quot;pvalue&quot;, &quot;iterations&quot;)
+  return(dfp)
+  
+}
+else{
+ dfg &lt;- tibble(as.character(pvalq, N ))
+  colnames(dfg) &lt;- c(&quot;pvalue&quot;, &quot;iterations&quot;)
+  return(dfg)
+}
+return(jmoney)
+}
+
+#create simulated dataset with 3 different groups (random sample, different means) 
+#calculate pvalue by each group seperately 
+
+set.seed(11224)
+new_data &lt;- tibble(values = c(rnorm(50, 1, 1),
+                              rnorm(50, 0, 1),
+                              rnorm(50, 0, 1)), 
+                   group = rep(c(&quot;Group_1&quot;, 
+                                 &quot;Group_2&quot;, 
+                                 &quot;Group_3&quot;), each = 50))
+
+#pipe it up, use group_by, and get some pvalues 
+new_data%&gt;%
+  group_by(group)%&gt;%
+  group_modify(~pvald(.,values, 1000,2))</code></pre>
+<pre><code>## # A tibble: 3 x 2
+## # Groups:   group [3]
+##   group   pvalue 
+##   &lt;chr&gt;   &lt;chr&gt;  
+## 1 Group_1 &lt;1/1000
+## 2 Group_2 0.003  
+## 3 Group_3 0.927</code></pre>
 
 
 

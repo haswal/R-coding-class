@@ -11,7 +11,7 @@
 
 
 
-<title>Resources</title>
+<title>Randomization p-value for group differences</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -375,37 +375,155 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Resources</h1>
+<h1 class="title toc-ignore">Randomization p-value for group differences</h1>
 
 </div>
 
 
-<p>Here you can find links to the reference text and other helpful guides and examples.</p>
-<div id="textbook-r-for-data-science" class="section level3">
-<h3>Textbook: R for Data Science</h3>
-<p><a href="https://r4ds.had.co.nz/">R For Data Science</a> is a <strong>free</strong> online text by Hadley Wickham and Garrett Grolemund. This is our workshop textbook. We won’t use this book chapter by chapter necessarily, but we will base many of our exercises off of this text.</p>
-<p><a href="https://r4ds.had.co.nz/"><img src="https://d33wubrfki0l68.cloudfront.net/b88ef926a004b0fce72b2526b0b5c4413666a4cb/24a30/cover.png" style="width:25.0%" /></a></p>
-<!-- ### Twitte`R` -->
-<!-- The `#rstats` community on Twitter is highly active and a great resource for learning and sharing all things R. Check it out! -->
-<!-- https://twitter.com/hashtag/rstats?lang=en -->
-<!-- ### TidyTuesday -->
-<!-- An interesting and new data set each week to practice transforming and plotting.  -->
-<!-- https://github.com/rfordatascience/tidytuesday -->
-<!-- Folks often share their plots (and link to their R code) on Twitter with [#tidytuesday](https://twitter.com/search?q=tidytuesday&src=typed_query&f=live). -->
-<!-- <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Tune in today at 🚨 7 PM ET 🚨 for another LIVE <a href="https://twitter.com/hashtag/tidytuesday?src=hash&amp;ref_src=twsrc%5Etfw">#tidytuesday</a> screencast. We&#39;ll be analyzing extinct plants! 🌱🌿🍁🍂<br><br>This week only is two hours LATER than the usual screencasts (so if you&#39;re in Australia, now&#39;s your chance to join live!) 😉 🇦🇺<a href="https://t.co/GJURrXOtD4">https://t.co/GJURrXOtD4</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/1295809704145424391?ref_src=twsrc%5Etfw">August 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> -->
-<!-- ### RStudio Education Website -->
-<!-- [https://education.rstudio.com/](https://education.rstudio.com/) - This site has a good, curated set of helpful links to help you start or learn how to do more with R. -->
-<!-- ### Interactive Practice -->
-<!-- [RStudio Cloud Primers](https://rstudio.cloud/learn/primers) - These are some short exercises that use interactive windows for practicing specific skills.  -->
+<p><br />
+</p>
+<div id="load-packages-and-generate-data" class="section level2">
+<h2>Load packages and generate data</h2>
+<pre class="r"><code>library(tidyverse)
+
+set.seed(112233)
+my_data &lt;- tibble(values = c(rnorm(50, 1.5, 1),
+                             rnorm(50, 1.8, 1)),
+                  group = rep(c(&quot;Ctrl&quot;,&quot;Drug&quot;),
+                              each = 50))</code></pre>
+<p><br />
+</p>
 </div>
-<div id="teacups-giraffes-statistics" class="section level3">
-<h3>Teacups, Giraffes, &amp; Statistics</h3>
-<p><a href="https://tinystats.github.io/teacups-giraffes-and-statistics/" class="uri">https://tinystats.github.io/teacups-giraffes-and-statistics/</a></p>
-<!-- ### Other websites -->
-<!-- All of the links below are sites built using R.  -->
-<!-- * A book: https://smltar.com/ -->
-<!-- * A blog: http://desiree.rbind.io/ -->
-<!-- * A project site: https://www.tidymodels.org/ -->
+<div id="plotting-the-data" class="section level2">
+<h2>Plotting the data</h2>
+<pre class="r"><code>my_data %&gt;% 
+  ggplot(aes(x = group, 
+             y = values,
+             fill = group))+
+  geom_boxplot()+
+  scale_fill_manual(values = c(&quot;grey90&quot;, 
+                               &quot;cornflowerblue&quot;))+
+  theme_classic()</code></pre>
+<p><img src="session_09_hasse_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><br />
+</p>
+</div>
+<div id="calculate-mean-difference-of-values-across-groups" class="section level2">
+<h2>Calculate mean difference of <code>values</code> across groups</h2>
+<p>The calculations we will look at below will be about the mean difference between our two groups, and therefore our observed value in this case will be the mean difference. Use the <code>pull()</code> function to convert a one column data frame to a vector.</p>
+<pre class="r"><code>(mean_diff &lt;- my_data %&gt;% 
+  group_by(group) %&gt;% 
+  summarise(m = mean(values)) %&gt;% 
+  summarise(d = diff(m)) %&gt;% 
+  pull())</code></pre>
+<pre><code>## [1] 0.3802851</code></pre>
+<p><br />
+</p>
+</div>
+<div id="writing-a-function-for-randomization" class="section level2">
+<h2>Writing a function for randomization</h2>
+<p>Randomization tests, just like bootstrapping, belong to the larger category of statistical tests referred to as resampling methods. Randomization is used to create sampling distributions under the null hypothesis that no <em>group</em> differences exist in the population. This is done by breaking up the true relationship between sample data groups, by shuffling individuals to the different groups randomly. Groups sizes are maintained, but for each randomization the individuals, and hence values, belonging to the different groups will vary. On average, this will result in no difference between the groups and therefore the sampling distribution will be centered about zero and represent the possible observed values under the null hypothesis that no real population group difference exists. The code below shows how put together a randomization test for group mean differences, and is statistically equivalent to a two-sample t-test.</p>
+<pre class="r"><code>rand_mean_diff &lt;- function(data, col, group){
+  data %&gt;% 
+    transmute({{group}},
+              shuffled = sample({{col}}, replace = FALSE)) %&gt;% 
+    group_by({{group}}) %&gt;% 
+    summarise(m = mean(shuffled)) %&gt;% 
+    summarise(d = diff(m))
+}</code></pre>
+<p><br />
+</p>
+</div>
+<div id="running-our-function-once-to-make-sure-it-works" class="section level2">
+<h2>Running our function once to make sure it works</h2>
+<pre class="r"><code>rand_mean_diff(my_data, values, group)</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##        d
+##    &lt;dbl&gt;
+## 1 0.0994</code></pre>
+<p><br />
+</p>
+</div>
+<div id="running-our-function-many-times-to-create-a-sampling-distribution" class="section level2">
+<h2>Running our function many times to create a sampling distribution</h2>
+<pre class="r"><code>res &lt;- map_dfr(1:1000, ~rand_mean_diff(my_data, values, group))</code></pre>
+<p><br />
+</p>
+</div>
+<div id="plot-histogram-of-the-bootstrapped-sampling-distibution" class="section level2">
+<h2>Plot histogram of the bootstrapped sampling distibution</h2>
+<pre class="r"><code>res %&gt;% 
+  ggplot(aes(x = d))+
+  geom_histogram()+
+  geom_vline(xintercept = mean_diff,
+             color = &quot;red&quot;,
+             linetype = &quot;dashed&quot;)+
+  theme_minimal()</code></pre>
+<p><img src="session_09_hasse_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><br />
+</p>
+</div>
+<div id="calculating-two-sided-p-value" class="section level2">
+<h2>Calculating two-sided p-value</h2>
+<pre class="r"><code>res %&gt;% 
+  summarise(p_value = mean(abs(d) &gt;= abs(mean_diff)))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   p_value
+##     &lt;dbl&gt;
+## 1   0.065</code></pre>
+<p><br />
+</p>
+</div>
+<div id="compare-output-to-t.test" class="section level2">
+<h2>Compare output to <code>t.test()</code></h2>
+<pre class="r"><code>t.test(values~group, data = my_data)$p.value</code></pre>
+<pre><code>## [1] 0.06963637</code></pre>
+<p><br />
+</p>
+</div>
+<div id="part-2-calculating-95-confidence-intervals-for-the-mean-difference" class="section level1">
+<h1>Part 2: Calculating 95% confidence intervals for the mean difference</h1>
+<p><br />
+</p>
+<div id="writing-a-function-for-bootstrapping" class="section level2">
+<h2>Writing a function for bootstrapping</h2>
+<p>When constructing confidence intervals for mean differences using bootstrapping, we sample with replacement <em>within</em> our groups and calculate the mean difference of these now bootstrapped groups. By using the <code>group_by()</code> function before sampling, we make sure the bootstrapping is being done in the groups separately. Also, the grouping is maintained when we get to the <code>summarise()</code> step, meaning that <code>mean(shuffled)</code> will calculate the mean per (bootstrapped) group.</p>
+<pre class="r"><code>boot_mean_diff &lt;- function(data, col, group){
+  data %&gt;% 
+    group_by({{group}}) %&gt;% 
+    transmute({{group}},
+              shuffled = sample({{col}}, replace = TRUE)) %&gt;% 
+    summarise(m = mean(shuffled)) %&gt;% 
+    summarise(d = diff(m))
+}</code></pre>
+<p><br />
+</p>
+</div>
+<div id="running-our-function-many-times-to-create-a-sampling-distribution-1" class="section level2">
+<h2>Running our function many times to create a sampling distribution</h2>
+<pre class="r"><code>res2 &lt;- map_dfr(1:1000, ~boot_mean_diff(my_data, values, group))</code></pre>
+<p><br />
+</p>
+</div>
+<div id="calculating-95-confidence-intervals" class="section level2">
+<h2>Calculating 95% confidence intervals</h2>
+<pre class="r"><code>res2 %&gt;% 
+  summarise(lowerCI = quantile(d, prob = 0.025),
+            upperCI = quantile(d, prob = 0.975)) </code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   lowerCI upperCI
+##     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 -0.0211   0.751</code></pre>
+<p><br />
+</p>
+</div>
+<div id="compare-output-to-t.test-1" class="section level2">
+<h2>Compare output to <code>t.test()</code></h2>
+<pre class="r"><code>t.test(values~group, data = my_data)$conf.int</code></pre>
+<pre><code>## [1] -0.7916992  0.0311290
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+</div>
 </div>
 
 
