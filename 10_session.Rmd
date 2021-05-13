@@ -1,6 +1,6 @@
 ---
 title: 'Session 10: Sampling variability and Effect size'
-date: "May 7, 2021"
+date: "May 13, 2021"
 output: html_document
 ---
 
